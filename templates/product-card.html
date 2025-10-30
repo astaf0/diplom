@@ -1,0 +1,73 @@
+<div class="row">
+    {% for product in products %}
+    <div class="product-card col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+        <div class="bg-white d-flex flex-column" style="padding: 15px;">
+
+
+            <!--Изображение-->
+            <a href="{% url 'product_details' product.product.slug product.color.slug %}"
+               class="product-card-img nav-link">
+                <div>
+                    {% if product.main_image %}
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="m-auto d-block"
+                         {% if not product.stock %}style="filter: grayscale(1);" {% endif %}>
+                    {% else %}
+                    <div style="color: #7acc18">{{ product.product.name }}</div>
+                    {% endif %}
+                </div>
+            </a>
+
+
+            <!--Карточка товара-->
+            <div class="d-flex flex-column justify-content-between" style="padding-top: 15px; height: 150px">
+
+
+                <a class="nav-link" href="{% url 'product_details' product.product.slug product.color.slug %}">
+                    <div>{{product}}</div>
+                </a>
+
+
+                <div>
+                    {% if product.product.average_rating %}
+                    <div class="d-flex align-items-center">
+                        <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                            <title>Bxs-star SVG Icon</title>
+                            <path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065z"
+                                  fill="#ffaa00"/>
+                        </svg>
+                        <span>{{ product.product.get_rating_display }} | Отзывов: {{ product.product.reviews_count }}</span>
+                    </div>
+
+                    {% else %}
+                    <div>{{ product.product.get_rating_display }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-between" style="height: 40px">
+                    <div class="d-flex align-items-center" style="font-size: 18px">{{product.product.price}}</div>
+
+                    {% if product.stock %}
+                    <form method="post" action="{% url 'cart:add' product.id %}" class="d-inline" style="width: 50%">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="cart-btn" style="height: 100%; width: 100%">
+                            В корзину
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="d-inline" style="width: 50%">
+                        <button class="cart-btn text-black" style="height: 100%; width: 100%; background: #9F9F9F"
+                                disabled>
+                            Закончился
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+

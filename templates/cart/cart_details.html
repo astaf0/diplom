@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block main %}
+<div class="container">
+
+    <div class="small-hl">Корзина</div>
+
+
+    {% if cart_data.items %}
+    <div class="row">
+        <div class="col-12 col-lg-9 p-0">
+            {% for item in cart_data.items %}
+            <div style="padding: 0 10px 10px 0">
+
+                <!--            карточка-->
+                <div class="bg-white d-flex justify-content-between" style="padding: 15px">
+
+                    <div class="d-flex">
+                        {% if item.product_variant.main_image %}
+                        <img src="{{ item.product_variant.main_image.url }}" alt="{{item.product_variant}}"
+                             style="height: 150px" class="m-3 d-block">
+                        {% else %}
+                        <div style="color: #76bc21">{{item.product_variant}}</div>
+                        {% endif %}
+                        <div>
+
+                            <p>{{item.product_variant.product.name}}</p>
+
+                            <p>Количество товара</p>
+                            <form method="post" action="{% url 'cart:update' item.id%}">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}"
+                                       min="1" max="{{ item.product_variant.stock }}">
+                                <button>Обновить</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="d-flex flex-column align-items-end">
+                        <form class="mb-3" method="post" action="{% url 'cart:remove' item.id%}">
+                            {% csrf_token %}
+                            <button>Удалить товар</button>
+                        </form>
+
+                        <p style="font-size: 18px"><b>{{ item.total_price }}</b></p>
+                        {% if item.quantity > 1 %}
+                        <p style="font-size: 14px">{{ item.quantity }} X {{ item.product_variant.product.price }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="col-12 col-lg-3" style="padding: 0 10px 10px 0">
+            <div class="bg-white d-flex flex-column align-items-center" style="padding: 15px">
+                <form action="{% url 'cart:clear' %}">
+                    <p>
+                        <button onclick="return confirm('Вы действительно хотите очистить корзину?')"><span>Очистить корзину</span>
+                        </button>
+                    </p>
+                </form>
+                <p class="text-secondary">Итого</p>
+                <p>Товаров: {{cart_data.total_items}}</p>
+                <p>Сумма к оплате:</p>
+                <p style="font-size: 22px"><b>{{cart_data.subtotal}}</b></p>
+            </div>
+        </div>
+    </div>
+
+
+    {% else %}
+    <div class="row text-center">
+        <p class="text-secondary">Корзина пустая</p>
+        <a class="link-underline link-underline-opacity-0" href="{% url 'main' %}">Вернуться к покупкам</a>
+    </div>
+    {% endif %}
+
+
+</div>
+{% endblock %}

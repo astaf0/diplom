@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{{category.name}}{% endblock %}
+
+
+{% block main %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a style="text-decoration: none" href="{% url 'main' %}">Каталог</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{category.name}}</li>
+    </ol>
+</nav>
+
+<div class="page-title">{{category.name}}</div>
+
+
+<button type="button" data-bs-toggle="modal" data-bs-target="#filterModal">
+    Фильтры
+</button>
+
+
+<!-- Модальное окно -->
+<div class="modal" id="filterModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-0 py-2 px-3" style="width: 450px; height: max-content">
+            <div class="modal-header border-0 pb-0 d-flex justify-content-between ">
+                <div class="small-hl p-0" style="font-size: 20px;">Фильтры</div>
+                <button type="button" class="border-0 bg-white" data-bs-dismiss="modal">X</button>
+            </div>
+
+            <form method="get" id="filterForm">
+                <div class="modal-body">
+                    {{ filter.form|crispy }}
+                </div>
+
+                <div class="modal-footer pt-0 border-0">
+                    <a class="nav-link" href="{% url 'catalog_category' category.slug %}">
+                        Сбросить все
+                    </a>
+                    <button type="submit">
+                        Применить фильтры
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if products %}
+{% include 'product-card.html' %}
+{% else %}
+<div id="productResults" class="row text-center text-secondary">
+    <p>Ничего не найдено</p>
+</div>
+{% endif %}
+
+{% endblock %}

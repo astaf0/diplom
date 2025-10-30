@@ -1,0 +1,204 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ product_variant }}{% endblock %}
+
+
+{% block main %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'main' %}" style="text-decoration: none">Каталог</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'catalog_category' product_variant.product.category.slug %}"
+                                       style="text-decoration: none">{{ product_variant.product.category.name }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product_variant }}</li>
+    </ol>
+</nav>
+
+
+<div class="row mx-0 bg-white p-4" style="margin-bottom: 50px">
+
+
+    <!--    изображения mobile-->
+    <div class="col-12 d-block d-lg-none">
+
+
+        <div id="carouselExampleDark" class="carousel carousel-dark slide py-4">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block m-auto" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}">
+                </div>
+
+
+                {% for image in images %}
+                <div class="carousel-item">
+                    <img class="d-block m-auto" src="{{ image.image.url }}" alt="{{ product.name }}">
+                </div>
+                {% endfor %}
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" style="height: 20px" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" style="height: 20px" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+
+
+    <!--    изображения desktop-->
+    <div class="col-lg-6 d-none d-lg-block">
+
+        <!-- Main Image -->
+        <div class="aspect-square">
+            {% if product_variant.main_image %}
+            <img style="height: 400px" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}"
+                 class="m-auto d-block">
+            {% endif %}
+        </div>
+
+
+        <!-- Additional Images -->
+        {% if images %}
+        <div class="d-flex flex-wrap" style="gap: 20px;">
+            <div style="cursor: pointer">
+                <img class="detail-images" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}"
+                     onclick="changeMainImage(this.src)">
+            </div>
+
+            {% for image in images %}
+            <div style="cursor: pointer">
+                <img class="detail-images" src="{{ image.image.url }}" alt="{{ product.name }}"
+                     onclick="changeMainImage(this.src)">
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+
+    <!--    Подробная информация-->
+    <div class="col-12 col-lg-6">
+        <div class="detail-title border-bottom">{{ product_variant }}</div>
+
+        <div class="d-flex mt-4">
+            {% if product.average_rating %}
+            <p>
+                <button class="scroll-to-btn d-flex align-items-center" onclick="scrollToElement('reviews')">
+                    <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                        <title>Bxs-star SVG Icon</title>
+                        <path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065z"
+                              fill="#ffaa00"/>
+                    </svg>
+                    <span>{{ product.get_rating_display }} | Отзывов: {{ product.reviews_count }}</span>
+                </button>
+            </p>
+            {% else %}
+            <p>
+                <button class="scroll-to-btn" disabled>
+                    <span>{{ product.get_rating_display }}</span>
+                </button>
+            </p>
+            {% endif %}
+            <p>
+                <button class="scroll-to-btn" onclick="scrollToElement('add_review')">
+                    <span>Написать отзыв</span>
+                </button>
+            </p>
+        </div>
+
+
+        <p>Производитель: {{ product_variant.product.brand.name }}</p>
+
+        <p>Цвет</p>
+        <p class="d-flex">
+            {% for product_option in product_colors %}
+            <a href="{% url 'product_details' product_option.product.slug product_option.color.slug %}"
+               class="scroll-to-btn">
+                <span>{{product_option.color}}</span>
+            </a>
+            {% endfor %}
+        </p>
+
+        <div class="border-bottom pb-2">
+            {% if product_variant.stock %}
+            <p>В наличии: {{product_variant.stock}} шт</p>
+            {% else %}
+            <p>Нет в наличии</p>
+            {% endif %}
+        </div>
+
+
+        <p class="mt-4" style="font-size: 22px"><b>{{ product_variant.product.price }}</b></p>
+
+
+        {% if product_variant.stock %}
+        <form method="post" action="{% url 'cart:add' product_variant.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="cart-btn p-3">Добавить в корзину</button>
+        </form>
+        {% else %}
+        <div class="d-inline" style="width: 50%">
+            <button class="cart-btn p-3 text-black" style="background: #9F9F9F" disabled>
+                Закончился
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+
+{% if product_variant.product.description %}
+<div class="row mb-4">
+    <div style="font-size: 14px">
+        {{ product_variant.product.description }}
+    </div>
+</div>
+{% endif %}
+
+
+<!--Отзывы-->
+<section id="reviews" class="row m-0" style="font-size: 14px;">
+    <div class="col-12 col-lg-9 p-0">
+        {% if reviews %}
+        <h4 class="small-hl">Отзывы ({{ product.reviews_count }})</h4>
+        {% for review in reviews %}
+        <div class="review mb-5">
+            <div style="height: 35px" class="d-flex justify-content-between">
+                <p style="font-weight: 600; font-size: 17px">{{review.author}}</p>
+                <div class="d-flex align-items-center">
+                    <p class="text-secondary" style="margin-right: 15px">{{review.get_relative_date}}</p>
+                    <p style="letter-spacing: -1px;">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                        <span class="yellow-star">★</span>
+                        {% else %}
+                        <span class="grey-star">★</span>
+                        {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+
+
+            {% if review.text %}
+            <p>{{review.text}}</p>
+            {% else %}
+            <p>Без текста</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+
+        <section id="add_review">
+            {% include 'add_review_form.html' %}
+        </section>
+    </div>
+</section>
+
+{% endblock %}

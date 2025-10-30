@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+
+<h4 class="small-hl">Оставить отзыв</h4>
+<form method="post">
+    {% csrf_token %}
+    {{ form.author|as_crispy_field }}
+    {{ form.text|as_crispy_field }}
+
+    <div class="d-flex justify-content-between">
+        <div class="star-rating">
+            {% for choice in form.rating %}
+                {{ choice.tag }}
+                <label class="review-star" for="{{choice.id_for_label}}">★</label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="cart-btn p-3">Отправить отзыв</button>
+    </div>
+</form>
+
+
+
+

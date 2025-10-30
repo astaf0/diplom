@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}Главная{% endblock %}
+
+
+{% block main %}
+<div class="small-hl">Популярные категории</div>
+
+<div class="row mb-4">
+   {% for category in categories_sorted_pr_num %}
+        <div class="index-category col-6 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+             <a class="nav-link" href="{% url 'catalog_category' category.slug %}">
+                <div class="cat-name bg-white d-flex flex-column justify-content-center">
+                    <div>{{ category.name }}</div>
+                    <div class="product-count text-secondary">Товаров: {{ category.product_count }}</div>
+                </div>
+
+             </a>
+        </div>
+{% endfor %}
+</div>
+
+
+
+<div class="small-hl">Новинки</div>
+
+{% include 'product-card.html' %}
+{% endblock %}
