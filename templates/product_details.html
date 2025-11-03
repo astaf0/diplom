@@ -103,11 +103,6 @@
                 </button>
             </p>
             {% endif %}
-            <p>
-                <button class="scroll-to-btn" onclick="scrollToElement('add_review')">
-                    <span>Написать отзыв</span>
-                </button>
-            </p>
         </div>
 
 
@@ -166,10 +161,30 @@
     <div class="col-12 col-lg-9 p-0">
         {% if reviews %}
         <h4 class="small-hl">Отзывы ({{ product.reviews_count }})</h4>
+
+        {% if user.is_authenticated %}
+            {% if not user_has_review %}
+                <p>
+                    <button onclick="scrollToElement('add_review')">
+                        <span>Написать отзыв</span>
+                    </button>
+                </p>
+            {% else %}
+                <div></div>
+            {% endif %}
+        {% else %}
+            <p>
+                <a href="{% url 'login' %}" class="nav-link">
+                    <span>Написать отзыв</span>
+                </a>
+            </p>
+        {% endif %}
+
+
         {% for review in reviews %}
         <div class="review mb-5">
             <div style="height: 35px" class="d-flex justify-content-between">
-                <p style="font-weight: 600; font-size: 17px">{{review.author}}</p>
+                <p style="font-weight: 600; font-size: 17px">{{review.user.username}}</p>
                 <div class="d-flex align-items-center">
                     <p class="text-secondary" style="margin-right: 15px">{{review.get_relative_date}}</p>
                     <p style="letter-spacing: -1px;">
@@ -195,9 +210,12 @@
         {% endif %}
 
 
-        <section id="add_review">
-            {% include 'add_review_form.html' %}
-        </section>
+        {% if user.is_authenticated and not user_has_review %}
+                <section id="add_review">
+                    {% include 'add_review_form.html' %}
+                </section>
+            {% endif %}
+
     </div>
 </section>
 

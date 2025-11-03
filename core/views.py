@@ -35,33 +35,34 @@ def product_details(request, product_slug, color_slug):
         product__slug=product_slug,
         color__slug=color_slug
     )
-
     images = ProductVariantImage.objects.filter(variant=product_variant)
-
     product_colors = ProductVariant.objects.filter(
         product__slug=product_slug
     ).select_related('color')
 
+
+
     reviews = product.reviews.all()
+    user_has_review = False
+    if request.user.is_authenticated:
+        user_has_review = product.reviews.filter(user=request.user).exists()
 
     if request.method == 'POST':
-        form = AddProductReviewForm(request.POST, user=request.user)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.product = product
-
-            if request.user.is_authenticated:
-                review.user = request.user
-                review.author = request.user.username
-            else:
-                review.user = None
-                review.author = form.cleaned_data['author']
-
-            review.save()
-            return redirect('product_details',
-                            product_slug=product_slug, color_slug=color_slug)
+        if request.user.is_authenticated:
+            if not user_has_review:
+                form = AddProductReviewForm(request.POST)
+                if form.is_valid():
+                    review = form.save(commit=False)
+                    review.user = request.user
+                    review.product = product
+                    review.save()
+                    return redirect('product_details',
+                                  product_slug=product_slug,
+                                  color_slug=color_slug)
+        else:
+            return redirect('login')
     else:
-        form = AddProductReviewForm(user=request.user)
+        form = AddProductReviewForm()
 
     context = {
         'product': product,
@@ -69,16 +70,10 @@ def product_details(request, product_slug, color_slug):
         'product_colors': product_colors,
         'reviews': reviews,
         'form': form,
-        'images': images
+        'images': images,
+        'user_has_review': user_has_review,
     }
     return render(request, 'product_details.html', context)
-
-
-@require_POST
-def delete_review(request, review_id):
-    review_to_delete = get_object_or_404(ProductReview, id=review_id)
-    review_to_delete.delete()
-    return redirect('reviews')
 
 
 

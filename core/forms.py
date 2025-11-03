@@ -17,22 +17,9 @@ class AddProductReviewForm(forms.ModelForm):
     )
     class Meta:
         model = ProductReview
-        fields = ['author', 'text', 'rating']
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-
-        if self.user and self.user.is_authenticated:
-            self.fields['author'].widget = forms.HiddenInput()
-            self.fields['author'].required = False
-
-        for field_name in self.fields:
-            self.fields[field_name].help_text = None
-            self.fields[field_name].widget.attrs.update({
-                'autocomplete': 'off',
-            })
-        self.fields['text'].widget.attrs.update({
-            'rows': 3,
-        })
-        self.fields['author'].label = 'Ваше имя'
+        fields = ['text', 'rating']
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'rows': 4,
+            }),
+        }

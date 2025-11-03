@@ -98,30 +98,28 @@ class ProductVariantImage(models.Model):
 
 class ProductReview(models.Model):
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, related_name='reviews')
-    author = models.CharField(max_length=100, verbose_name='Автор')
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Текст отзыва', blank=True)
     rating = models.IntegerField(verbose_name='Оценка', validators=[MinValueValidator(1), MaxValueValidator(5)])
-    created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания')
-    user = models.ForeignKey(User, default=1, verbose_name='пользователь', on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
 
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
         ordering = ['-created_at']
-
-    def save(self, *args, **kwargs):
-        if self.user and not self.author:
-            self.author = self.user.username
-        super().save(*args, **kwargs)
+        unique_together = ['product', 'user']
 
     def get_relative_date(self):
         now = timezone.now()
         today = now.date()
 
         if self.created_at.date() == today:
-            return f"сегодня в {self.created_at.strftime("%H:%M")}"
+            return f"сегодня в {self.created_at.strftime('%H:%M')}"
+
         elif self.created_at.date() == today - timezone.timedelta(days=1):
-            return f"вчера в {self.created_at.strftime("%H:%M")}"
+            return f"вчера в {self.created_at.strftime('%H:%M')}"
+
         else:
             return self.created_at.strftime("%d.%m.%Y")
 

@@ -139,6 +139,8 @@ SESSION_COOKIE_AGE = 86400 # 30 дней
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_NAME = 'sessionid'
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
 
 
 

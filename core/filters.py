@@ -9,7 +9,7 @@ class ProductFilter(django_filters.FilterSet):
         lookup_expr='gte',
         label='Цена',
         widget=forms.NumberInput(attrs={
-            'class': 'form-control border-bottom border-black p-2',
+            'class': 'form-control border-bottom p-2',
             'placeholder': 'От'
         })
     )
@@ -19,7 +19,7 @@ class ProductFilter(django_filters.FilterSet):
         lookup_expr='lte',
         label='',
         widget=forms.NumberInput(attrs={
-            'class': 'form-control border-bottom border-black p-2',
+            'class': 'form-control border-bottom p-2',
             'placeholder': 'До'
         })
     )
@@ -42,7 +42,7 @@ class ProductFilter(django_filters.FilterSet):
         lookup_expr='icontains',
         label='',
         widget=forms.TextInput(attrs={
-            'class': 'form-control border-bottom border-black p-2',
+            'class': 'form-control border-bottom p-2',
             'placeholder': 'Цвет'
         })
     )
@@ -52,7 +52,7 @@ class ProductFilter(django_filters.FilterSet):
         lookup_expr='icontains',
         label='',
         widget=forms.TextInput(attrs={
-            'class': 'form-control border-bottom border-black p-2',
+            'class': 'form-control border-bottom p-2',
             'placeholder': 'Бренд'
         })
     )

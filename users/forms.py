@@ -1,44 +1,34 @@
 from django import forms
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import get_user_model, authenticate
+from django.core.validators import RegexValidator
 
-class LoginForm(forms.Form):
-    username = forms.CharField(label='Имя пользователя')
-    password = forms.CharField(widget=forms.PasswordInput(), label='Пароль')
-
-    def __init__(self, request=None, *args, **kwargs):
-        self.request = request
-        self.user = None
-        super().__init__(*args, **kwargs)
-        for field_name in self.fields:
-            self.fields[field_name].help_text = None
-            self.fields[field_name].widget.attrs.update({
-                'autocomplete': 'off',
-            })
-
-    def clean(self):
-        data = self.cleaned_data
-        username = data['username']
-        password = data['password']
-        self.user = authenticate(self.request, username=username, password=password)
-        if not self.user:
-            raise forms.ValidationError('Неверное имя пользователя или пароль')
-        return data
-
-    def get_user(self):
-        return self.user
+User = get_user_model()
 
 
-class RegisterForm(forms.Form):
-    username = forms.CharField(label='Имя пользователя')
-    password1 = forms.CharField(widget=forms.PasswordInput(), label='Пароль')
-    password2 = forms.CharField(widget=forms.PasswordInput(), label='Повторите пароль')
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput()
+    )
+    password1 = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput()
+    )
+    password2 = forms.CharField(
+        label='Подтвердите пароль',
+        widget=forms.PasswordInput()
+    )
 
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        User = get_user_model()
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Пользователь с таким именем уже есть')
-        return username
+    class Meta:
+        model = User
+        fields = ('email',)
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Пользователь с таким email уже существует")
+        return email
 
     def clean(self):
         password1 = self.cleaned_data['password1']
@@ -46,3 +36,57 @@ class RegisterForm(forms.Form):
         if password1 != password2:
             raise forms.ValidationError('Пароли не совпадают')
         return self.cleaned_data
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput()
+    )
+    password = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput()
+    )
+
+    def clean(self):
+        email = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if email and password:
+            self.user_cache = authenticate(
+                self.request,
+                username=email,
+                password=password
+            )
+            if self.user_cache is None:
+                raise forms.ValidationError("Неверный email или пароль")
+            else:
+                self.confirm_login_allowed(self.user_cache)
+        return self.cleaned_data
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput()
+    )
+    username = forms.CharField(
+        label='Имя пользователя',
+        widget=forms.TextInput()
+    )
+    phone = forms.CharField(
+        label='Телефон',
+        required=False,
+        validators=[RegexValidator(r'^\+?1?\d{9,15}$', "Введите корректный номер телефона")],
+        widget=forms.TextInput()
+    )
+
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'phone')
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError('Пользователь с таким email уже существует')
+        return email

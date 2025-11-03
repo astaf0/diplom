@@ -9,8 +9,7 @@
                class="product-card-img nav-link">
                 <div>
                     {% if product.main_image %}
-                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="m-auto d-block"
-                         {% if not product.stock %}style="filter: grayscale(1);" {% endif %}>
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="m-auto d-block">
                     {% else %}
                     <div style="color: #7acc18">{{ product.product.name }}</div>
                     {% endif %}

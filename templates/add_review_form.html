@@ -3,7 +3,6 @@
 <h4 class="small-hl">Оставить отзыв</h4>
 <form method="post">
     {% csrf_token %}
-    {{ form.author|as_crispy_field }}
     {{ form.text|as_crispy_field }}
 
     <div class="d-flex justify-content-between">
