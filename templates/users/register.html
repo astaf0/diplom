@@ -12,7 +12,7 @@
         {% csrf_token %}
         {{ form|crispy }}
         <button class="btn-submit mt-4" type="submit">Зарегистрироваться</button>
-        <div class="mt-4">Есть аккаунт? <a style="text-decoration: none" href="{% url 'login' %}">Войти</a></div>
+        <div class="mt-4">Есть аккаунт? <a class="link-underline link-underline-opacity-0 link-dark" href="{% url 'login' %}">Войти</a></div>
     </form>
 </div>
 {% endblock %}

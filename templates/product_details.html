@@ -7,9 +7,12 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'main' %}" style="text-decoration: none">Каталог</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'catalog_category' product_variant.product.category.slug %}"
-                                       style="text-decoration: none">{{ product_variant.product.category.name }}</a>
+        <li class="breadcrumb-item">
+            <a class="link-underline link-underline-opacity-0 link-dark" href="{% url 'main' %}">Каталог</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-underline link-underline-opacity-0 link-dark"
+               href="{% url 'catalog_category' product_variant.product.category.slug %}">{{ product_variant.product.category.name }}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">{{ product_variant }}</li>
     </ol>
@@ -50,33 +53,30 @@
 
 
     <!--    изображения desktop-->
-    <div class="col-lg-6 d-none d-lg-block">
-
-        <!-- Main Image -->
-        <div class="aspect-square">
-            {% if product_variant.main_image %}
-            <img style="height: 400px" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}"
-                 class="m-auto d-block">
-            {% endif %}
-        </div>
-
-
+    <div class="col-lg-6 d-none d-lg-flex" style="gap: 15px">
         <!-- Additional Images -->
         {% if images %}
-        <div class="d-flex flex-wrap" style="gap: 20px;">
-            <div style="cursor: pointer">
-                <img class="detail-images" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}"
-                     onclick="changeMainImage(this.src)">
+        <div class="d-flex flex-column">
+            <div class="thumbnail-item " style="cursor: pointer" onclick="changeMainImage('{{ product_variant.main_image.url }}')">
+                <img class="detail-images" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}">
             </div>
 
             {% for image in images %}
-            <div style="cursor: pointer">
-                <img class="detail-images" src="{{ image.image.url }}" alt="{{ product.name }}"
-                     onclick="changeMainImage(this.src)">
+            <div class="thumbnail-item" style="cursor: pointer" onclick="changeMainImage('{{ image.image.url }}')">
+                <img class="detail-images" src="{{ image.image.url }}" alt="{{ product.name }}">
             </div>
             {% endfor %}
         </div>
         {% endif %}
+
+
+        <!-- Main Image -->
+        <div class="aspect-square" style="width: 100%">
+            {% if product_variant.main_image %}
+            <img style="height: 350px" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}"
+                 class="m-auto d-block" id="mainImage">
+            {% endif %}
+        </div>
     </div>
 
 
@@ -87,7 +87,7 @@
         <div class="d-flex mt-4">
             {% if product.average_rating %}
             <p>
-                <button class="scroll-to-btn d-flex align-items-center" onclick="scrollToElement('reviews')">
+                <button class="d-flex align-items-center" onclick="scrollToElement('reviews')">
                     <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                         <title>Bxs-star SVG Icon</title>
                         <path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065z"
@@ -98,7 +98,7 @@
             </p>
             {% else %}
             <p>
-                <button class="scroll-to-btn" disabled>
+                <button disabled>
                     <span>{{ product.get_rating_display }}</span>
                 </button>
             </p>
@@ -106,19 +106,16 @@
         </div>
 
 
-        <p>Производитель: {{ product_variant.product.brand.name }}</p>
-
         <p>Цвет</p>
         <p class="d-flex">
             {% for product_option in product_colors %}
-            <a href="{% url 'product_details' product_option.product.slug product_option.color.slug %}"
-               class="scroll-to-btn">
+            <a href="{% url 'product_details' product_option.product.slug product_option.color.slug %}">
                 <span>{{product_option.color}}</span>
             </a>
             {% endfor %}
         </p>
 
-        <div class="border-bottom pb-2">
+        <div>
             {% if product_variant.stock %}
             <p>В наличии: {{product_variant.stock}} шт</p>
             {% else %}
@@ -127,7 +124,7 @@
         </div>
 
 
-        <p class="mt-4" style="font-size: 22px"><b>{{ product_variant.product.price }}</b></p>
+        <p class="mt-4">{{ product_variant.product.price }}</p>
 
 
         {% if product_variant.stock %}
@@ -163,21 +160,21 @@
         <h4 class="small-hl">Отзывы ({{ product.reviews_count }})</h4>
 
         {% if user.is_authenticated %}
-            {% if not user_has_review %}
-                <p>
-                    <button onclick="scrollToElement('add_review')">
-                        <span>Написать отзыв</span>
-                    </button>
-                </p>
-            {% else %}
-                <div></div>
-            {% endif %}
+        {% if not user_has_review %}
+        <p>
+            <button onclick="scrollToElement('add_review')">
+                <span>Написать отзыв</span>
+            </button>
+        </p>
         {% else %}
-            <p>
-                <a href="{% url 'login' %}" class="nav-link">
-                    <span>Написать отзыв</span>
-                </a>
-            </p>
+        <div></div>
+        {% endif %}
+        {% else %}
+        <p>
+            <a href="{% url 'login' %}" class="nav-link">
+                <span>Написать отзыв</span>
+            </a>
+        </p>
         {% endif %}
 
 
@@ -211,10 +208,10 @@
 
 
         {% if user.is_authenticated and not user_has_review %}
-                <section id="add_review">
-                    {% include 'add_review_form.html' %}
-                </section>
-            {% endif %}
+        <section id="add_review">
+            {% include 'add_review_form.html' %}
+        </section>
+        {% endif %}
 
     </div>
 </section>

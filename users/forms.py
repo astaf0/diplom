@@ -1,28 +1,19 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model, authenticate
-from django.core.validators import RegexValidator
+from phonenumber_field.formfields import PhoneNumberField
 
 User = get_user_model()
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(
-        label='Email',
-        widget=forms.EmailInput()
-    )
-    password1 = forms.CharField(
-        label='Пароль',
-        widget=forms.PasswordInput()
-    )
-    password2 = forms.CharField(
-        label='Подтвердите пароль',
-        widget=forms.PasswordInput()
-    )
+    email = forms.EmailField(label='Email')
+    password1 = forms.CharField(label='Пароль')
+    password2 = forms.CharField(label='Подтвердите пароль')
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ['email', 'password1', 'password2']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -39,19 +30,12 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(
-        label='Email',
-        widget=forms.EmailInput()
-    )
-    password = forms.CharField(
-        label='Пароль',
-        widget=forms.PasswordInput()
-    )
+    username = forms.EmailField(label='Email')
+    password = forms.CharField(label='Пароль')
 
     def clean(self):
         email = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
-
         if email and password:
             self.user_cache = authenticate(
                 self.request,
@@ -66,24 +50,20 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 class ProfileUpdateForm(forms.ModelForm):
-    email = forms.EmailField(
-        label='Email',
-        widget=forms.EmailInput()
-    )
-    username = forms.CharField(
-        label='Имя пользователя',
-        widget=forms.TextInput()
-    )
-    phone = forms.CharField(
+    email = forms.EmailField(label='Email')
+    username = forms.CharField(label='Имя пользователя')
+    phone = PhoneNumberField(
         label='Телефон',
         required=False,
-        validators=[RegexValidator(r'^\+?1?\d{9,15}$', "Введите корректный номер телефона")],
-        widget=forms.TextInput()
+        region='RU',
+        widget=forms.TextInput(attrs={
+            'placeholder': '+7 999 999 99 99',
+        })
     )
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'phone')
+        fields = ['email', 'username', 'phone']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

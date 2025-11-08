@@ -5,6 +5,15 @@
 
 {% block main %}
 <h4 class="small-hl">Мои отзывы</h4>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Мои отзывы</li>
+    </ol>
+</nav>
+
+
 {% if reviews %}
 <div class="row">
     {% for review in reviews %}

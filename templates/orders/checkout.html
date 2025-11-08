@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Новый заказ{% endblock %}
+
+{% block main %}
+
+Сумма заказа: {{ cart_data.subtotal }}
+
+<form method="post" class="row">
+    {% csrf_token %}
+    <div class="col-6">
+       <div class="small-hl">Данные покупателя</div>
+        {{ form.email|as_crispy_field }}
+        {{ form.phone|as_crispy_field }}
+    </div>
+
+    <div class="col-6">
+       <div class="small-hl">Адрес доставки</div>
+        {{ form.city|as_crispy_field }}
+        {{ form.street|as_crispy_field }}
+        {{ form.building|as_crispy_field }}
+        {{ form.entrance|as_crispy_field }}
+        {{ form.flat|as_crispy_field }}
+    </div>
+
+    <button type="submit">Заказать</button>
+</form>
+
+
+{% endblock %}

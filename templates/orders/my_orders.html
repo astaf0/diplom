@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Заказы{% endblock %}
+
+{% block main %}
+
+<h4 class="small-hl">Заказы</h4>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Заказы</li>
+    </ol>
+</nav>
+
+
+{% if orders %}
+<div class="row">
+    {% for order in orders %}
+    <div class="col-4" style="padding: 15px;">
+        <div class="bg-white" style="padding: 15px;">
+            <div class="d-flex flex-wrap" style="gap: 15px">
+            {% for item in order.items.all %}
+                <img src="{{item.product_variant.main_image.url}}" style="height: 70px; display: block;">
+            {% endfor %}
+            </div>
+
+            <p>{{order.created_at|date:"d.m.Y"}}</p>
+
+            <p class="text-center">{{order.status}}</p>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+    {% else %}
+        <div class="row text-center text-secondary">
+            <p>У Вас нет заказов</p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+
+
+
+
+

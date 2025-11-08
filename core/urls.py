@@ -3,7 +3,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from .views import *
-from .views import delete_my_review
 
 urlpatterns = ([
     path('', main, name='main'),

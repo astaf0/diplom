@@ -80,25 +80,8 @@ body {
     background: #7acc18;
 }
 
-.scroll-to-btn {
-    font-size: 15px;
-    font-weight: 600;
-    border: 0;
-    border-radius: 5px;
-    background: #f4f4f4;
-    padding: 5px 15px;
-    text-decoration: none;
-    color: black;
-    margin-right: 5px;
-}
-
-
 .cart-btn:not([disabled]):hover {
     filter: brightness(0.9);
-}
-
-.scroll-to-btn:not([disabled]):hover {
-    filter: brightness(0.95);
 }
 
 .footer-link:hover {
@@ -156,7 +139,7 @@ img {
 }
 
 .detail-images {
-    height: 100px;
+    height: 60px;
     display: block;
 }
 
@@ -344,7 +327,7 @@ img {
         padding: 20px;
     }
     .detail-images {
-        height: 120px;
+        height: 70px;
     }
 
 

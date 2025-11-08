@@ -1,25 +1,29 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from core.models import ProductVariant
 from decimal import Decimal
-from users.models import CustomUser
+
+User = get_user_model()
 
 
 class Cart(models.Model):
     session_key = models.CharField(max_length=40, unique=True, null=True, blank=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name = 'корзина'
+        verbose_name_plural = 'корзины'
         unique_together = ('session_key', 'user')
 
     def __str__(self):
         if self.user:
-            return f"Cart for user: {self.user.email}"
+            return f"Корзина пользователя: {self.user.email}"
         elif self.session_key:
-            return f"Cart session: {self.session_key}"
+            return f"Сессионная корзина: {self.session_key}"
         else:
-            return f"Cart #{self.id} (anonymous)"
+            return f"Анонимная корзина {self.id}"
 
     @property
     def total_items(self):
@@ -92,6 +96,8 @@ class CartItem(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'товар корзины'
+        verbose_name_plural = 'товары корзины'
         unique_together = ('cart', 'product_variant')
 
     def __str__(self):

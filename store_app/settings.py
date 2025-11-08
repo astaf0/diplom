@@ -29,10 +29,12 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'crispy_forms',
     'django_filters',
+    'phonenumber_field',
     
     'core',
     'cart',
     'users',
+    'orders',
 ]
 
 AUTHENTICATION_BACKENDS = [

@@ -23,3 +23,6 @@ class AddProductReviewForm(forms.ModelForm):
                 'rows': 4,
             }),
         }
+        labels = {
+            'text': 'Текст отзыва',
+        }

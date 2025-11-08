@@ -20,6 +20,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'категория'
+        verbose_name_plural = 'категории'
+
 
 class Brand(models.Model):
     name = models.CharField(max_length=100)
@@ -32,6 +36,10 @@ class Brand(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'бренд'
+        verbose_name_plural = 'бренды'
 
 
 class Product(models.Model):
@@ -62,6 +70,10 @@ class Product(models.Model):
     def reviews_count(self):
         return self.reviews.count()
 
+    class Meta:
+        verbose_name = 'товар'
+        verbose_name_plural = 'товары'
+
 
 class Color(models.Model):
     name = models.CharField(max_length=50)
@@ -75,6 +87,10 @@ class Color(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'цвет'
+        verbose_name_plural = 'цвета'
+
 
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants')
@@ -85,6 +101,8 @@ class ProductVariant(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name = 'вариант товара'
+        verbose_name_plural = 'варианты товара'
         ordering = ['-created_at']
 
     def __str__(self):
@@ -95,18 +113,22 @@ class ProductVariantImage(models.Model):
     variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='products/extra/')
 
+    class Meta:
+        verbose_name = 'фотография товара'
+        verbose_name_plural = 'фотографии товара'
+
 
 class ProductReview(models.Model):
-    product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    text = models.TextField(verbose_name='Текст отзыва', blank=True)
-    rating = models.IntegerField(verbose_name='Оценка', validators=[MinValueValidator(1), MaxValueValidator(5)])
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
     class Meta:
-        verbose_name = 'Отзыв'
-        verbose_name_plural = 'Отзывы'
+        verbose_name = 'отзыв'
+        verbose_name_plural = 'отзывы'
         ordering = ['-created_at']
         unique_together = ['product', 'user']
 

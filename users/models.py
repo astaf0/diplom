@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.utils import timezone
 import random
 import string
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class CustomUserManager(BaseUserManager):
@@ -31,9 +32,13 @@ def generate_username():
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('email адрес', unique=True)
+    email = models.EmailField('email', unique=True)
     username = models.CharField('имя пользователя', max_length=150, unique=True)
-    phone = models.CharField('телефон', max_length=20, blank=True)
+    phone = PhoneNumberField(
+        'Номер телефона',
+        region='RU', blank=True,
+        help_text='+7 999 999 99 99'
+    )
     is_active = models.BooleanField('активен', default=True)
     is_staff = models.BooleanField('сотрудник', default=False)
     date_joined = models.DateTimeField('дата регистрации', default=timezone.now)
