@@ -25,6 +25,11 @@ def new_order(request):
             order.save()
 
             for cart_item in cart_data['items']:
+                product_variant = cart_item.product_variant
+                if product_variant.stock >= cart_item.quantity:
+                    product_variant.stock -= cart_item.quantity
+                    product_variant.save()
+
                 OrderItem.objects.create(
                     order=order,
                     product_variant=cart_item.product_variant,

@@ -37,7 +37,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone = PhoneNumberField(
         'Номер телефона',
         region='RU', blank=True,
-        help_text='+7 999 999 99 99'
     )
     is_active = models.BooleanField('активен', default=True)
     is_staff = models.BooleanField('сотрудник', default=False)

@@ -57,12 +57,12 @@
         <!-- Additional Images -->
         {% if images %}
         <div class="d-flex flex-column">
-            <div class="thumbnail-item " style="cursor: pointer" onclick="changeMainImage('{{ product_variant.main_image.url }}')">
+            <div class="thumbnail-item p-1" style="cursor: pointer" onclick="changeMainImage('{{ product_variant.main_image.url }}')">
                 <img class="detail-images" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}">
             </div>
 
             {% for image in images %}
-            <div class="thumbnail-item" style="cursor: pointer" onclick="changeMainImage('{{ image.image.url }}')">
+            <div class="thumbnail-item p-1" style="cursor: pointer" onclick="changeMainImage('{{ image.image.url }}')">
                 <img class="detail-images" src="{{ image.image.url }}" alt="{{ product.name }}">
             </div>
             {% endfor %}
@@ -73,21 +73,20 @@
         <!-- Main Image -->
         <div class="aspect-square" style="width: 100%">
             {% if product_variant.main_image %}
-            <img style="height: 350px" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}"
-                 class="m-auto d-block" id="mainImage">
+            <img src="{{ product_variant.main_image.url }}" alt="{{ product.name }}"
+                 class="main-image m-auto d-block" id="mainImage">
             {% endif %}
         </div>
     </div>
 
 
     <!--    Подробная информация-->
-    <div class="col-12 col-lg-6">
-        <div class="detail-title border-bottom">{{ product_variant }}</div>
+    <div class="col-12 col-lg-6 d-flex flex-column justify-content-between p-0">
+        <div class="detail-title" style="font-size: 20px">{{ product_variant }}</div>
 
-        <div class="d-flex mt-4">
             {% if product.average_rating %}
             <p>
-                <button class="d-flex align-items-center" onclick="scrollToElement('reviews')">
+                <button class="btn btn-sm btn-outline-dark rounded-0 d-flex align-items-center" onclick="scrollToElement('reviews')">
                     <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                         <title>Bxs-star SVG Icon</title>
                         <path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065z"
@@ -98,55 +97,48 @@
             </p>
             {% else %}
             <p>
-                <button disabled>
+                <button class="btn btn-sm btn-outline-dark rounded-0" disabled>
                     <span>{{ product.get_rating_display }}</span>
                 </button>
             </p>
             {% endif %}
-        </div>
 
 
-        <p>Цвет</p>
-        <p class="d-flex">
-            {% for product_option in product_colors %}
-            <a href="{% url 'product_details' product_option.product.slug product_option.color.slug %}">
-                <span>{{product_option.color}}</span>
-            </a>
-            {% endfor %}
-        </p>
+            <p>Цвет</p>
+            <p class="d-flex" style="gap: 10px">
+                {% for product_option in product_colors %}
+                    <a class="{% if product_variant.color.name|stringformat:'s' == product_option.color|stringformat:'s' %}btn active{% else %}btn{% endif %} btn-outline-dark rounded-0"
+                       href="{% url 'product_details' product_option.product.slug product_option.color.slug %}">
+                        <span>{{ product_option.color }}</span>
+                    </a>
+                {% endfor %}
+            </p>
 
-        <div>
+            <p>Цена</p>
+            <div class="d-flex justify-content-between">
+              <p>{{ product_variant.product.price }}</p>
+
             {% if product_variant.stock %}
-            <p>В наличии: {{product_variant.stock}} шт</p>
+            <form method="post"  action="{% url 'cart:add' product_variant.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="cart-btn p-3">Добавить в корзину</button>
+            </form>
             {% else %}
-            <p>Нет в наличии</p>
+            <div >
+                <button class="cart-btn p-3 text-black" style="background: #9F9F9F" disabled>
+                    Закончился
+                </button>
+            </div>
             {% endif %}
         </div>
-
-
-        <p class="mt-4">{{ product_variant.product.price }}</p>
-
-
-        {% if product_variant.stock %}
-        <form method="post" action="{% url 'cart:add' product_variant.id %}">
-            {% csrf_token %}
-            <input type="hidden" name="quantity" value="1">
-            <button type="submit" class="cart-btn p-3">Добавить в корзину</button>
-        </form>
-        {% else %}
-        <div class="d-inline" style="width: 50%">
-            <button class="cart-btn p-3 text-black" style="background: #9F9F9F" disabled>
-                Закончился
-            </button>
-        </div>
-        {% endif %}
     </div>
 </div>
 
 
 {% if product_variant.product.description %}
 <div class="row mb-4">
-    <div style="font-size: 14px">
+    <div style="font-size: 14px; white-space: pre-wrap; white-space: break-spaces;">
         {{ product_variant.product.description }}
     </div>
 </div>
@@ -157,25 +149,18 @@
 <section id="reviews" class="row m-0" style="font-size: 14px;">
     <div class="col-12 col-lg-9 p-0">
         {% if reviews %}
-        <h4 class="small-hl">Отзывы ({{ product.reviews_count }})</h4>
 
+        <div class="d-flex align-items-center mb-5 mt-4">
+        <h4 class="small-hl p-0 me-3">Отзывы ({{ product.reviews_count }})</h4>
         {% if user.is_authenticated %}
-        {% if not user_has_review %}
-        <p>
-            <button onclick="scrollToElement('add_review')">
-                <span>Написать отзыв</span>
-            </button>
-        </p>
+            {% if not user_has_review %}
+                <button class="cart-btn bg-white p-3" onclick="scrollToElement('add_review')">Написать отзыв</button>
+            {% endif %}
         {% else %}
-        <div></div>
+            <a class="cart-btn bg-white p-3 mb-3" href="{% url 'login' %}">Написать отзыв</a>
         {% endif %}
-        {% else %}
-        <p>
-            <a href="{% url 'login' %}" class="nav-link">
-                <span>Написать отзыв</span>
-            </a>
-        </p>
-        {% endif %}
+        </div>
+
 
 
         {% for review in reviews %}
@@ -198,7 +183,7 @@
 
 
             {% if review.text %}
-            <p>{{review.text}}</p>
+            <p style="white-space: pre-wrap; white-space: break-spaces;">{{review.text}}</p>
             {% else %}
             <p>Без текста</p>
             {% endif %}

@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
-from django.contrib import messages
 from .models import ProductVariant
 from .forms import CartAddForm, CartUpdateForm
 
@@ -25,12 +24,7 @@ def add_to_cart(request, variant_id):
 
     if form.is_valid():
         quantity = form.cleaned_data['quantity']
-
-        try:
-            request.cart.add_product(product_variant, quantity)
-
-        except Exception as e:
-            messages.error(request, f'Ошибка при добавлении в корзину: {str(e)}')
+        request.cart.add_product(product_variant, quantity)
     return redirect(request.META.get('HTTP_REFERER', 'cart:details'))
 
 
@@ -41,7 +35,7 @@ def update_cart_item(request, item_id):
     if form.is_valid():
         quantity = form.cleaned_data['quantity']
         request.cart.update_item_quantity(item_id, quantity)
-    return redirect('cart:details')
+    return redirect(request.META.get('HTTP_REFERER', 'cart:details'))
 
 
 @require_POST
@@ -52,5 +46,4 @@ def remove_from_cart(request, item_id):
 
 def clear_cart(request):
     request.cart.clear()
-    messages.success(request, 'Корзина очищена')
     return redirect('cart:details')

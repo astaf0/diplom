@@ -28,7 +28,6 @@ class Order(models.Model):
     city = models.CharField(max_length=30)
     street = models.CharField(max_length=30)
     building = models.CharField(max_length=10)
-    entrance = models.CharField(max_length=10, blank=True, null=True)
     flat = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -38,6 +37,7 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
+        ordering = ['-created_at']
 
 
 class OrderItem(models.Model):

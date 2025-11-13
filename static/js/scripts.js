@@ -67,3 +67,66 @@ function changeMainImage(src) {
 }
 
 
+
+
+
+
+// quantity form
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.quantity-form');
+
+    forms.forEach(form => {
+        const input = form.querySelector('.quantity-input');
+        const minusBtn = form.querySelector('.minus');
+        const plusBtn = form.querySelector('.plus');
+
+        updateButtonStates();
+
+        // Обработчик для минуса
+        minusBtn.addEventListener('click', function() {
+            let value = parseInt(input.value);
+            if (value > parseInt(input.min)) {
+                input.value = value - 1;
+                updateButtonStates();
+                form.submit();
+            }
+        });
+
+        // Обработчик для плюса
+        plusBtn.addEventListener('click', function() {
+            let value = parseInt(input.value);
+            if (value < parseInt(input.max)) {
+                input.value = value + 1;
+                updateButtonStates();
+                form.submit();
+            }
+        });
+
+        // Обработчик прямого ввода
+        input.addEventListener('change', function() {
+            let value = parseInt(this.value);
+            const min = parseInt(this.min);
+            const max = parseInt(this.max);
+
+            if (value < min) {
+                this.value = min;
+            } else if (value > max) {
+                this.value = max;
+            }
+
+            updateButtonStates();
+            form.submit();
+        });
+
+        function updateButtonStates() {
+            const value = parseInt(input.value);
+            const min = parseInt(input.min);
+            const max = parseInt(input.max);
+
+            minusBtn.disabled = value <= min;
+            plusBtn.disabled = value >= max;
+        }
+    });
+});
+
+

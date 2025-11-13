@@ -19,9 +19,6 @@
 <!-- Header mobile -->
 <nav class="nav-sm-2 bg-white d-flex align-items-center text-black">
     <div class="container d-flex justify-content-between">
-        <div class="catalog-btn" style="cursor: pointer" data-bs-toggle="offcanvas" data-bs-target="#catalogOffcanvas">
-            Каталог
-        </div>
     </div>
 </nav>
 
@@ -44,17 +41,14 @@
             </svg>
         </div>
 
-        <a class="nav-link position-relative d-flex" href="{% url 'cart:details' %}">
+        <a class="nav-link" href="{% url 'cart:details' %}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024"><title>Shopping-cart
                 SVG Icon</title>
                 <path fill="currentColor"
                       d="M432 928a48 48 0 1 1 0-96a48 48 0 0 1 0 96m320 0a48 48 0 1 1 0-96a48 48 0 0 1 0 96M96 128a32 32 0 0 1 0-64h160a32 32 0 0 1 31.36 25.728L320.64 256H928a32 32 0 0 1 31.296 38.72l-96 448A32 32 0 0 1 832 768H384a32 32 0 0 1-31.36-25.728L229.76 128zm314.24 576h395.904l82.304-384H333.44z"/>
             </svg>
             {% if cart_total_items %}
-            <span class="border border-white border-2 position-absolute top-0 start-100 translate-middle d-flex justify-content-center align-items-center rounded-circle bg-black"
-                  style="font-size: 13px; font-weight: 600; height: 22px; width: 22px; color: #f4f4f4">
-                    {{cart_total_items}}
-               </span>
+               <span class="badge text-bg-secondary">{{cart_total_items}}</span>
             {% endif %}
         </a>
 
@@ -81,14 +75,15 @@
 
         <div class="d-flex align-items-center" style="gap: 30px">
 
-            <a class="nav-link position-relative d-flex" href="{% url 'cart:details' %}">
+            <a class="nav-link" href="{% url 'cart:details' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024"><title>
                     Shopping-cart SVG Icon</title>
                     <path fill="currentColor"
                           d="M432 928a48 48 0 1 1 0-96a48 48 0 0 1 0 96m320 0a48 48 0 1 1 0-96a48 48 0 0 1 0 96M96 128a32 32 0 0 1 0-64h160a32 32 0 0 1 31.36 25.728L320.64 256H928a32 32 0 0 1 31.296 38.72l-96 448A32 32 0 0 1 832 768H384a32 32 0 0 1-31.36-25.728L229.76 128zm314.24 576h395.904l82.304-384H333.44z"/>
                 </svg>
                 {% if cart_total_items %}
-                <span style="font-size: 16px;">({{cart_total_items}})</span>
+               <span class="badge text-bg-secondary">{{cart_total_items}}</span>
+
                 {% endif %}
             </a>
 

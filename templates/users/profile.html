@@ -5,29 +5,70 @@
 
 
 {% block main %}
-<div class="row m-0">
-    <div class="col-3 bg-white d-flex flex-column p-4">
 
-        <a class="py-3 nav-link border-bottom d-flex align-items-center" href="{% url 'my_reviews' %}">
-            <span>Мои отзывы</span>
-        </a>
-        <a class="py-3 nav-link border-bottom d-flex align-items-center" href="{% url 'my_orders' %}">
-            <span>Заказы</span>
-        </a>
-        <a onclick="return confirm('Вы действительно хотите выйти?');" class="py-3 nav-link border-bottom d-flex align-items-center" href="{% url 'logout' %}">
-            <span>Выйти</span>
-        </a>
+<div class="page-title text-center" style="font-size: 50px; height: 113px; margin-bottom: 30px">Профиль</div>
 
 
+<div class="d-flex justify-content-center mb-5" style="gap: 20px">
+
+    <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+        Выйти
+    </button>
+
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalCenterTitle">Выход</h1>
+                </div>
+                <div class="modal-body">
+                    <p>Вы действительно хотите выйти?</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn text-white" style="padding: 6px 12px; background: #7acc18;" href="{% url 'logout' %}">
+                        <span>Да</span>
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="col-9 ps-4 pe-0">
-      <h4 class="small-hl">{{user.username}}</h4>
-        <form method="post">
+    <a class="nav-link" href="{% url 'my_orders' %}">
+        <span>Заказы</span>
+    </a>
+
+    <a class="nav-link" href="{% url 'my_reviews' %}">
+        <span>Мои отзывы</span>
+    </a>
+</div>
+
+
+
+<div class="row" >
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+
+        <form class="d-flex flex-column" method="post">
             {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit">Сохранить</button>
+
+
+                {{ form.email|as_crispy_field }}
+
+                {{ form.username|as_crispy_field }}
+
+                {{ form.phone|as_crispy_field }}
+
+
+            <button class="cart-btn py-3" type="submit">Сохранить</button>
         </form>
     </div>
+
+    <div class="col-lg-3"></div>
 </div>
+
+
+
+
 {% endblock %}

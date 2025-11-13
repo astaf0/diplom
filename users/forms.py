@@ -56,9 +56,6 @@ class ProfileUpdateForm(forms.ModelForm):
         label='Телефон',
         required=False,
         region='RU',
-        widget=forms.TextInput(attrs={
-            'placeholder': '+7 999 999 99 99',
-        })
     )
 
     class Meta:

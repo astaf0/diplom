@@ -5,27 +5,37 @@
 {% block title %}Новый заказ{% endblock %}
 
 {% block main %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a class="nav-link" href="{% url 'cart:details' %}">Корзина</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Новый заказ</li>
+    </ol>
+</nav>
 
-Сумма заказа: {{ cart_data.subtotal }}
 
-<form method="post" class="row">
+<form method="post" class="mt-5">
     {% csrf_token %}
-    <div class="col-6">
-       <div class="small-hl">Данные покупателя</div>
+
+    <div class="small-hl">1. Данные покупателя</div>
+    <div class="d-flex mb-5" style="gap: 15px">
         {{ form.email|as_crispy_field }}
         {{ form.phone|as_crispy_field }}
     </div>
 
-    <div class="col-6">
-       <div class="small-hl">Адрес доставки</div>
+    <div class="small-hl">2. Адрес доставки</div>
+    <div class="d-flex mb-5" style="gap: 15px">
         {{ form.city|as_crispy_field }}
         {{ form.street|as_crispy_field }}
         {{ form.building|as_crispy_field }}
-        {{ form.entrance|as_crispy_field }}
         {{ form.flat|as_crispy_field }}
     </div>
 
-    <button type="submit">Заказать</button>
+    <div class="small-hl">3. Оплата</div>
+    <p class="mb-5">Сумма заказа: {{ cart_data.subtotal }}</p>
+
+    <button class="cart-btn p-3" style="width: 200px" type="submit">Заказать</button>
 </form>
 
 

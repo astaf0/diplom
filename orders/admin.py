@@ -14,7 +14,7 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ['user']
     inlines = [OrderItemInline]
     readonly_fields = ['email', 'phone', 'city', 'street',
-                       'building', 'entrance', 'flat', 'created_at']
+                       'building', 'flat', 'created_at']
 
 
 @admin.register(OrderItem)

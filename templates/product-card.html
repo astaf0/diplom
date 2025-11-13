@@ -6,12 +6,10 @@
 
             <!--Изображение-->
             <a href="{% url 'product_details' product.product.slug product.color.slug %}"
-               class="product-card-img nav-link">
+               class="nav-link">
                 <div>
                     {% if product.main_image %}
-                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="m-auto d-block">
-                    {% else %}
-                    <div style="color: #7acc18">{{ product.product.name }}</div>
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="first-image m-auto">
                     {% endif %}
                 </div>
             </a>
@@ -45,7 +43,7 @@
                 <div class="d-flex justify-content-between" style="height: 40px">
                     <div class="d-flex align-items-center" style="font-size: 18px">{{product.product.price}}</div>
 
-                    {% if product.stock %}
+                    {% if product.stock and product|stringformat:"s" not in request.cart.get_cart_data.items|stringformat:"s" %}
                     <form method="post" action="{% url 'cart:add' product.id %}" class="d-inline" style="width: 50%">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">
@@ -53,6 +51,35 @@
                             В корзину
                         </button>
                     </form>
+
+
+                    {% elif product|stringformat:"s" in request.cart.get_cart_data.items|stringformat:"s" %}
+                        {% for item in request.cart.get_cart_data.items %}
+                            {% if product|stringformat:"s" in item|stringformat:"s" %}
+                              <form method="post" action="{% url 'cart:update' item.id %}" class="quantity-form btn-group">
+                                {% csrf_token %}
+                                    <button type="button" class="quantity-btn minus btn btn-sm btn-outline-dark rounded-0" data-action="decrease">
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 1024 1024"><title>Minus SVG Icon</title><path fill="currentColor" d="M128 544h768a32 32 0 1 0 0-64H128a32 32 0 0 0 0 64"/></svg>
+                                    </button>
+
+                                    <input class="quantity-input" type="hidden" name="quantity" value="{% if item.quantity > item.product_variant.stock %}{{ item.product_variant.stock }}{% else %}{{ item.quantity }}{% endif %}"
+                                           min="1" max="{% if item.product_variant.stock < 10 %}{{ item.product_variant.stock}}{% else %}10{% endif %}">
+
+                                    <div class="btn cart-btn">
+                                        {% if item.quantity > item.product_variant.stock %}
+                                            {{ item.product_variant.stock }}
+                                        {% else %}
+                                            {{ item.quantity }}
+                                        {% endif %}
+                                    </div>
+
+                                    <button type="button" class="m-0 quantity-btn plus btn btn-sm btn-outline-dark rounded-0" data-action="increase">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 1024 1024"><title>Plus SVG Icon</title><path fill="currentColor" d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"/></svg>
+                                    </button>
+                            </form>
+                            {% endif %}
+                          {% endfor %}
+
                     {% else %}
                     <div class="d-inline" style="width: 50%">
                         <button class="cart-btn text-black" style="height: 100%; width: 100%; background: #9F9F9F"

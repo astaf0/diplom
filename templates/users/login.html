@@ -5,14 +5,19 @@
 
 
 {% block main %}
-<div style="margin: 0 auto; width: 700px">
-   <h4 class="small-hl text-center mb-4">Вход</h4>
+<div class="row" style="margin-top: 70px">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+         <h4 class="small-hl mb-4">Вход</h4>
 
-    <form class="d-flex flex-column" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn-submit mt-4" type="submit">Войти</button>
-        <div class="mt-4">Нет аккаунта? <a class="link-underline link-underline-opacity-0 link-dark" href="{% url 'register' %}">Регистрация</a></div>
-    </form>
+        <form class="d-flex flex-column" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="cart-btn py-3" type="submit">Войти</button>
+            <div class="mt-4">Нет аккаунта? <a class="link-underline link-underline-opacity-0 link-dark" href="{% url 'register' %}">Регистрация</a></div>
+        </form>
+    </div>
+
+    <div class="col-lg-3"></div>
 </div>
 {% endblock %}

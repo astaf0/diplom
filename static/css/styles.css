@@ -48,7 +48,7 @@ body {
 /* Заголовки */
 .page-title {
     font-family: "Unbounded", sans-serif;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 500;
     width: 100%;
     padding-bottom: 16px;
@@ -78,9 +78,11 @@ body {
     font-weight: 400;
     border: 0;
     background: #7acc18;
+    color: black;
+    text-decoration: none;
 }
 
-.cart-btn:not([disabled]):hover {
+.cart-btn:hover {
     filter: brightness(0.9);
 }
 
@@ -133,18 +135,25 @@ form label{
 
 /*------------------------------------------*/
 /* Изображения */
-img {
-    height: 200px;
+.first-image {
+    width: 280px;
+    height: 300px;
+    object-fit: contain;
     display: block;
 }
 
 .detail-images {
-    height: 60px;
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
     display: block;
 }
 
 .carousel-item img {
-    height: 300px;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    display: block;
 }
 
 
@@ -200,6 +209,9 @@ img {
     height: 0;
 }
 
+.small-text {
+    font-size: 12px;
+}
 
 
 
@@ -248,7 +260,7 @@ img {
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     }
     .page-title {
-        font-size: 32px;
+        font-size: 38px;
         font-weight: 500;
         padding-bottom: 16px;
         margin-bottom: 32px;
@@ -270,7 +282,11 @@ img {
     }
 
     .carousel-item img {
+        width: 350px;
         height: 350px;
+    }
+    .small-text {
+        font-size: 14px;
     }
 
 }
@@ -281,7 +297,7 @@ img {
         height: 250px;
     }
     .page-title {
-        font-size: 36px;
+        font-size: 40px;
         font-weight: 500;
         padding-bottom: 16px;
         margin-bottom: 32px;
@@ -311,6 +327,16 @@ img {
         font-size: 26px;
 
     }
+    .small-text {
+        font-size: 15px;
+    }
+
+    .main-image {
+        width: 300px;
+        height: 300px;
+        object-fit: contain;
+        display: block;
+    }
 
 }
 
@@ -328,6 +354,10 @@ img {
     }
     .detail-images {
         height: 70px;
+    }
+    .main-image {
+        width: 400px;
+        height: 400px;
     }
 
 

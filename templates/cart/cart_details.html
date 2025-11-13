@@ -6,70 +6,119 @@
 {% block main %}
 <div class="container">
 
-    <div class="small-hl">Корзина</div>
+<div class="page-title text-center" style="font-size: 50px; margin-bottom: 40px">Корзина</div>
 
 
     {% if cart_data.items %}
-    <div class="row">
-        <div class="col-12 col-lg-9 p-0">
+<div class="d-flex justify-content-end mb-4">
+        <button type="button" class="cart-btn bg-white p-3" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+        Очистить корзину
+    </button>
+</div>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalCenterTitle">Корзина</h1>
+                </div>
+                <div class="modal-body">
+                    <p>Вы действительно хотите очистить корзину?</p>
+                </div>
+                <div class="modal-footer">
+                   <form action="{% url 'cart:clear' %}">
+                        <button class="btn text-white" style="padding: 6px 12px; background: #7acc18;">
+                            <span>Да</span>
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row m-0">
+        <div class="col-12 col-lg-7 p-0">
             {% for item in cart_data.items %}
-            <div style="padding: 0 10px 10px 0">
+            <div style="padding-bottom: 10px">
 
                 <!--            карточка-->
                 <div class="bg-white d-flex justify-content-between" style="padding: 15px">
 
                     <div class="d-flex">
-                        {% if item.product_variant.main_image %}
-                        <img src="{{ item.product_variant.main_image.url }}" alt="{{item.product_variant}}"
-                             style="height: 150px" class="m-3 d-block">
-                        {% else %}
-                        <div style="color: #76bc21">{{item.product_variant}}</div>
-                        {% endif %}
+                        <a href="{% url 'product_details' item.product_variant.product.slug item.product_variant.color.slug %}">
+                            {% if item.product_variant.main_image %}
+                            <img src="{{ item.product_variant.main_image.url }}" alt="{{item.product_variant}}"
+                             style="height: 120px" class="me-3 d-block">
+                            {% else %}
+                            <div style="color: #76bc21">{{item.product_variant}}</div>
+                            {% endif %}
+                        </a>
+
+
                         <div>
+                            <a class="nav-link" href="{% url 'product_details' item.product_variant.product.slug item.product_variant.color.slug %}">
+                                <p class="detail-title p-0" style="font-size: 16px">{{item.product_variant}}</p>
+                            </a>
 
-                            <p>{{item.product_variant.product.name}}</p>
-
-                            <p>Количество товара</p>
-                            <form method="post" action="{% url 'cart:update' item.id%}">
+                            <form method="post" action="{% url 'cart:update' item.id %}" class="quantity-form btn-group">
                                 {% csrf_token %}
-                                <input type="number" name="quantity" value="{{ item.quantity }}"
-                                       min="1" max="{{ item.product_variant.stock }}">
-                                <button>Обновить</button>
+                                    <button type="button" class="quantity-btn minus btn btn-sm btn-outline-dark rounded-0" data-action="decrease">
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 1024 1024"><title>Minus SVG Icon</title><path fill="currentColor" d="M128 544h768a32 32 0 1 0 0-64H128a32 32 0 0 0 0 64"/></svg>
+                                    </button>
+
+                                    <input class="quantity-input" type="hidden" name="quantity" value="{% if item.quantity > item.product_variant.stock %}{{ item.product_variant.stock }}{% else %}{{ item.quantity }}{% endif %}"
+                                           min="1" max="{% if item.product_variant.stock < 10 %}{{ item.product_variant.stock}}{% else %}10{% endif %}">
+
+                                    <div class="btn cart-btn">
+                                        {% if item.quantity > item.product_variant.stock %}
+                                            {{ item.product_variant.stock }}
+                                        {% else %}
+                                            {{ item.quantity }}
+                                        {% endif %}
+                                    </div>
+
+                                    <button type="button" class="m-0 quantity-btn plus btn btn-sm btn-outline-dark rounded-0" data-action="increase">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 1024 1024"><title>Plus SVG Icon</title><path fill="currentColor" d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"/></svg>
+                                    </button>
                             </form>
                         </div>
                     </div>
 
 
-                    <div class="d-flex flex-column align-items-end">
-                        <form class="mb-3" method="post" action="{% url 'cart:remove' item.id%}">
-                            {% csrf_token %}
-                            <button>Удалить товар</button>
-                        </form>
+                    <div class="d-flex flex-column justify-content-between">
+                        <div class="text-end" >
+                            <p style="font-size: 18px">{{ item.total_price }}</p>
+                            {% if item.quantity > 1 %}
+                            <p style="font-size: 14px" class="text-secondary">{{ item.product_variant.product.price }} | 1 шт</p>
+                            {% endif %}
+                        </div>
 
-                        <p>{{ item.total_price }}</p>
-                        {% if item.quantity > 1 %}
-                        <p >{{ item.quantity }} * {{ item.product_variant.product.price }}</p>
-                        {% endif %}
+
+                        <form class="text-end" method="post" action="{% url 'cart:remove' item.id%}">
+                            {% csrf_token %}
+                            <button class="btn btn-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>Trash SVG Icon</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m20 9l-1.995 11.346A2 2 0 0 1 16.035 22h-8.07a2 2 0 0 1-1.97-1.654L4 9m17-3h-5.625M3 6h5.625m0 0V4a2 2 0 0 1 2-2h2.75a2 2 0 0 1 2 2v2m-6.75 0h6.75"/></svg>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
 
+        <div class="col-1"></div>
 
-        <div class="col-12 col-lg-3" style="padding: 0 10px 10px 0">
-            <div class="bg-white d-flex flex-column align-items-center" style="padding: 15px">
-                <form action="{% url 'cart:clear' %}">
-                    <p>
-                        <button onclick="return confirm('Вы действительно хотите очистить корзину?')"><span>Очистить корзину</span>
-                        </button>
-                    </p>
-                </form>
-                <p>Итого</p>
-                <p>Товаров: {{cart_data.total_items}}</p>
-                <p>Сумма к оплате:</p>
-                <p>{{cart_data.subtotal}}</p>
-                <a href="{% if user.is_authenticated %}{% url 'new_order' %}{% else %}{% url 'login' %}{% endif %}">
+        <div class="col-12 col-lg-4 p-0">
+            <div class="bg-white" style="padding: 15px; font-size: 18px">
+                <p class="d-flex justify-content-between">
+                    <span>Товаров</span><span>{{cart_data.total_items}}</span>
+                </p>
+                <p class="d-flex justify-content-between">
+                    <span>Итого</span><span>{{cart_data.subtotal}}</span>
+                </p>
+                <a class="cart-btn py-3 d-flex justify-content-center" style="width: 100%" href="{% if user.is_authenticated %}{% url 'new_order' %}{% else %}{% url 'login' %}{% endif %}">
                     Создать заказ
                 </a>
             </div>

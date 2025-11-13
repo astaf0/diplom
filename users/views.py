@@ -10,7 +10,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login_func(request, user)
-            return redirect('profile')
+            return redirect('main')
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})

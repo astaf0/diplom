@@ -7,7 +7,7 @@ class ProductFilter(django_filters.FilterSet):
     price_range_min = django_filters.NumberFilter(
         field_name='product__price',
         lookup_expr='gte',
-        label='Цена',
+        label='',
         widget=forms.NumberInput(attrs={
             'class': 'form-control border-bottom p-2',
             'placeholder': 'От'

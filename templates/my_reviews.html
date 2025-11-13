@@ -4,26 +4,31 @@
 
 
 {% block main %}
-<h4 class="small-hl">Мои отзывы</h4>
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Мои отзывы</li>
-    </ol>
-</nav>
+<div class="page-title d-flex justify-content-center align-items-end" style="font-size: 40px; height: 113px; margin-bottom: 30px">Мои отзывы</div>
+
+<div class="d-flex justify-content-center mb-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Мои отзывы</li>
+        </ol>
+    </nav>
+</div>
 
 
 {% if reviews %}
-<div class="row">
-    {% for review in reviews %}
-    <div class="col-9" style="font-size: 14px;">
-        <div class="review" style="margin-bottom: 50px">
-            <div class="d-flex justify-content-between">
-             <div class="d-flex" style="font-weight: 600; font-size: 17px;">{{review.product}}</div>
-                <div class="d-flex align-items-center">
-                    <div class="text-secondary" style="margin-right: 15px">{{review.get_relative_date}}</div>
-                    <div style="letter-spacing: -1px;">
+{% for review in reviews %}
+<div class="row mb-5">
+
+    <div class="col-12 col-lg-9">
+
+        <div class="review">
+            <div style="height: 35px" class="d-flex justify-content-between align-items-center">
+                <div style="font-weight: 600; font-size: 17px">{{review.product.name}}</div>
+                <div class="d-flex flex-wrap justify-content-end align-items-center">
+                    <div class="small-text text-secondary">{{review.get_relative_date}}</div>
+                    <div style="letter-spacing: -1px; margin-left: 15px">
                         {% for i in "12345" %}
                             {% if forloop.counter <= review.rating %}
                             <span class="yellow-star">★</span>
@@ -35,43 +40,49 @@
                 </div>
             </div>
 
-            {% if review.text %}
-            <div style="width: 800px">{{review.text}}</div>
-            {% else %}
-            <div>Без текста</div>
-            {% endif %}
+            <div style="white-space: pre-wrap; white-space: break-spaces;">{{review.text}}</div>
         </div>
     </div>
 
 
-    <div class="col-3">
-        <button class="dropdown-toggle border-0" style="background: #f4f4f4"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false">
+    <div class="col-12 col-lg-3 ">
+       <button type="button" class="cart-btn p-3 bg-white" style="width: 100%"
+            data-bs-toggle="modal" data-bs-target="#modal-{{ review.id }}">
         Действия
-      </button>
+    </button>
 
-      <ul class="dropdown-menu border-0 rounded-0" >
-          <li>
-              <form method="post"
-                    action="{% url 'delete_my_review' review.id %}"
-                    onsubmit="return confirm('Вы действительно хотите удалить этот отзыв?');">
-                  {% csrf_token %}
-                  <button type="submit" class="dropdown-item text-danger" style="font-weight: 500;">
-                      Удалить
-                  </button>
-              </form>
-          </li>
-      </ul>
+    <!-- Уникальный id для каждого модального окна -->
+    <div class="modal fade" id="modal-{{ review.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Действия</h1>
+                </div>
+                <div class="modal-body d-flex flex-column">
+                    <p>Отзыв на {{review.product.name}}</p>
+                    <form method="post" action="{% url 'delete_my_review' review.id %}">
+                        {% csrf_token %}
+                        <button type="submit" style="width: 100%" class="btn btn-danger">
+                            Удалить
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="width: 100%" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
     </div>
-    {% endfor %}
+    </div>
 
+
+
+</div>
+    {% endfor %}
     {% else %}
-        <div class="row text-center text-secondary">
+        <div class="text-center text-secondary">
             <p>Пока нет отзывов</p>
         </div>
     {% endif %}
-</div>
 
 {% endblock %}
