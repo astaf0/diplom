@@ -1,0 +1,1 @@
+from store_app.wsgi import application

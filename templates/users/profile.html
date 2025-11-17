@@ -11,11 +11,6 @@
 
 <div class="d-flex justify-content-center mb-5" style="gap: 20px">
 
-    <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-        Выйти
-    </button>
-
-
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -60,9 +55,17 @@
 
                 {{ form.phone|as_crispy_field }}
 
+        <div class="d-flex">
+            <button class="flex-fill cart-btn p-3" type="submit">Сохранить</button>
+            <button type="button" class="flex-fill cart-btn bg-secondary p-3" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                Выйти
+            </button>
+        </div>
 
-            <button class="cart-btn py-3" type="submit">Сохранить</button>
         </form>
+
+
+
     </div>
 
     <div class="col-lg-3"></div>

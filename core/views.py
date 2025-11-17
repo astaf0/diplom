@@ -1,29 +1,76 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.db.models import Count
 
 from .forms import *
 from .models import *
-from .filters import *
+
+
+def search(request):
+    form = SearchForm(request.GET or None)
+    products = ProductVariant.objects.all()
+
+    query = request.GET.get('q')
+
+    if query:
+        products = ProductVariant.objects.search(query=query)
+
+    sort_form = SortForm(request.GET or None)
+    sort = request.GET.get('sort')
+    if sort == 'price_asc':
+        products = products.order_by('product__price')
+    elif sort == 'price_desc':
+        products = products.order_by('-product__price')
+    elif sort == 'new':
+        products = products.order_by('-created_at')
+
+    context = {
+        'form': form,
+        'sort_form': sort_form,
+        'products': products,
+        'query': query,
+        'results_count': products.count(),
+    }
+    return render(request, 'search_results.html', context)
 
 
 
 def main(request):
     products = ProductVariant.objects.all()[:8]
-    context = {'products': products}
+    popular_categories = Category.objects.annotate(
+        product_count=Count('product')
+    ).order_by('-product_count')
+    context = {
+        'products': products,
+        'popular_categories': popular_categories,
+    }
     return render(request, 'index.html', context)
 
 
 def catalog_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
+    popular_categories = Category.objects.annotate(
+        product_count=Count('product')
+    ).order_by('-product_count')
     products = ProductVariant.objects.all().filter(product__category__slug=category_slug)
 
-    product_filter = ProductFilter(request.GET, queryset=products)
+    sort_form = SortForm(request.GET or None)
+
+    sort = request.GET.get('sort')
+    if sort == 'price_asc':
+        products = products.order_by('product__price')
+    elif sort == 'price_desc':
+        products = products.order_by('-product__price')
+    elif sort == 'new':
+        products = products.order_by('-created_at')
+
 
     context = {
         'category': category,
-        'filter': product_filter,
-        'products': product_filter.qs,
+        'popular_categories': popular_categories,
+        'products': products,
+        'sort_form': sort_form,
     }
     return render(request, 'catalog_category.html', context)
 

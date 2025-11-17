@@ -1,16 +1,40 @@
+from itertools import product
+
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg, Count
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 User = get_user_model()
+
+
+class ProductManager(models.Manager):
+    def search(self, query):
+        if query:
+            query = query.strip().lower()
+            return self.get_queryset().filter(
+                Q(product__name__icontains=query) |
+                Q(product__description__icontains=query) |
+                Q(product__brand__name__icontains=query) |
+                Q(product__category__name__icontains=query) |
+                Q(product__price__icontains=query) |
+                Q(color__name__icontains=query)
+            ).distinct()
+        return self.get_queryset()
+
+
+
+
+
 
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, unique=True)
+    image = models.ImageField(upload_to='categories')
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -23,6 +47,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
+        ordering = ['name']
 
 
 class Brand(models.Model):
@@ -48,7 +73,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -99,6 +124,8 @@ class ProductVariant(models.Model):
     stock = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = ProductManager()
 
     class Meta:
         verbose_name = 'вариант товара'

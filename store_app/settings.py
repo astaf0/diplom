@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-lut2$@0(sz73n28lzhxni(3m=&m&vm1)59v#@exgro60yy#b*8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'core.context_processors.categories_context',
+                'core.context_processors.search_form',
                 'cart.context_processors.cart_context'
             ],
         },

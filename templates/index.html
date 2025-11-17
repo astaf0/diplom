@@ -7,17 +7,19 @@
 <div class="small-hl">Популярные категории</div>
 
 <div class="row mb-4">
-   {% for category in categories_sorted_pr_num|slice:":4" %}
+   {% for category in popular_categories|slice:":4" %}
         <div class="index-category col-6 col-sm-6 col-md-4 col-lg-3 col-xl-4">
              <a class="nav-link" href="{% url 'catalog_category' category.slug %}">
-                <div class="cat-name bg-white d-flex flex-column justify-content-center">
-                    <div>{{ category.name }}</div>
-                    <div class="product-count text-secondary">Товаров: {{ category.product_count }}</div>
-                </div>
-
+                 <div class="cat-name d-flex bg-white">
+                    <img src="{{ category.image.url }}" class="cat-image me-2">
+                    <div class="d-flex flex-column justify-content-center">
+                        <div>{{ category.name }}</div>
+                        <div class="product-count text-secondary">Товаров: {{ category.product_count }}</div>
+                    </div>
+                 </div>
              </a>
         </div>
-{% endfor %}
+    {% endfor %}
 </div>
 
 

@@ -13,50 +13,27 @@
 
 <div class="page-title">{{category.name}}</div>
 
-<div class="mb-4 d-flex flex-wrap">
-   {% for sorted_category in categories_sorted_pr_num|slice:":4" %}
-         <a class="d-flex btn border-0 rounded-0 {% if sorted_category.name == category.name %}active bg-white border-0{% endif %}"
-            href="{% url 'catalog_category' sorted_category.slug %}">
-            <div class="p-2">{{ sorted_category.name }}<span class="ms-2 badge text-bg-secondary">{{ sorted_category.product_count }}</span></div>
+<div class="row mb-4 d-flex flex-wrap">
+   {% for popular_category in popular_categories|slice:":4" %}
+    <div class="index-category col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+         <a class="p-3 d-flex align-items-center btn border-0 rounded-0 {% if popular_category.name == category.name %}active bg-white border-0{% endif %}" href="{% url 'catalog_category' popular_category.slug %}">
+            <img class="catalog-cat-image" src="{{ popular_category.image.url }}">
+            <div class="mx-2">{{ popular_category.name }}</div>
+            <span class="badge text-bg-secondary">{{ popular_category.product_count }}</span>
          </a>
+        </div>
    {% endfor %}
 </div>
 
 
-<!--<button type="button" data-bs-toggle="modal" data-bs-target="#filterModal">-->
-<!--    Фильтры-->
-<!--</button>-->
 
+<form method="get">
+    <p>Сортировка</p>
+    {% for radio in sort_form %}
+        {{radio}}
+    {% endfor %}
+</form>
 
-<!--&lt;!&ndash; Модальное окно &ndash;&gt;-->
-<!--<div class="modal" id="filterModal" tabindex="-1">-->
-<!--    <div class="modal-dialog modal-dialog-centered">-->
-<!--        <div class="modal-content rounded-0 py-2 px-3" style="width: 450px; height: max-content">-->
-<!--            <form method="get" id="filterForm">-->
-<!--                <div class="modal-body">-->
-
-<!--                    <label>Цена</label>-->
-<!--                    <div class="d-flex mb-3" style="gap: 15px">-->
-<!--                        {{ filter.form.price_range_min|as_crispy_field }}-->
-<!--                        {{ filter.form.price_range_max|as_crispy_field }}-->
-<!--                    </div>-->
-<!--                    <div class="mb-3">{{ filter.form.in_stock|as_crispy_field }}</div>-->
-<!--                     <div class="mb-3">{{ filter.form.color|as_crispy_field }}</div>-->
-<!--                     <div class="mb-3">{{ filter.form.brand|as_crispy_field }}</div>-->
-<!--                </div>-->
-
-<!--                <div class="modal-footer pt-0 border-0">-->
-<!--                    <a class="nav-link" href="{% url 'catalog_category' category.slug %}">-->
-<!--                        Сбросить все-->
-<!--                    </a>-->
-<!--                    <button type="submit">-->
-<!--                        Применить фильтры-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 {% if products %}
 {% include 'product-card.html' %}

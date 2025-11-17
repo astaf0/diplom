@@ -1,14 +1,14 @@
 from .models import Category
-from django.db.models import Count
+from .forms import SearchForm
 
 
 def categories_context(request):
-    product_count = Count('product')
-    categories = Category.objects.annotate(
-        product_count=Count('product')
-    ).order_by('-product_count')
+    categories = Category.objects.all().order_by('name')
+    return {'categories': categories}
 
+
+def search_form(request):
+    initial = {'q': request.GET.get('q', '')}
     return {
-        'categories_sorted_pr_num': categories,
-        'product_count': product_count
+        'search_form': SearchForm(initial=initial),
     }

@@ -116,7 +116,7 @@
 
             <p>Цена</p>
             <div class="d-flex justify-content-between">
-              <p>{{ product_variant.product.price }}</p>
+                <div class="detail-title" style="font-size: 18px">{{ product_variant.product.price }}</div>
 
             {% if product_variant.stock %}
             <form method="post"  action="{% url 'cart:add' product_variant.id %}">

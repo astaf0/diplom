@@ -18,7 +18,6 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(
         choices=STATUS_CHOICES,
         default='В обработке',
@@ -42,8 +41,8 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product_variant = models.ForeignKey(ProductVariant,  on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
+    price = models.IntegerField()
     quantity = models.PositiveIntegerField()
 
     def __str__(self):

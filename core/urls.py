@@ -10,6 +10,7 @@ urlpatterns = ([
     path('products/<str:product_slug>-<str:color_slug>', product_details, name='product_details'),
     path('reviews/my', my_reviews, name='my_reviews'),
     path('reviews/my/<int:review_id>/delete', delete_my_review, name='delete_my_review'),
+    path('search/', search, name='search'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

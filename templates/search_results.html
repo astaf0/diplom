@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}Результаты поиска{% endblock %}
+
+
+{% block main %}
+<div class="small-hl">Поиск "{{query}}"</div>
+
+{% if results_count %}
+    <p class="mb-4">Найдено товаров: {{results_count}}</p>
+
+
+    <form method="get">
+        <div style="display: none">{{ form }}</div>
+
+        <p>Сортировка</p>
+
+        <div class="d-flex flex-wrap">
+        {% for radio in sort_form %}
+            <div class="me-3 mb-1">{{radio}}</div>
+        {% endfor %}
+        </div>
+    </form>
+
+{% include 'product-card.html' %}
+
+
+{% else %}
+    <div class="text-center text-secondary">
+        <p>Ничего не найдено</p>
+    </div>
+
+{% endif %}
+{% endblock %}

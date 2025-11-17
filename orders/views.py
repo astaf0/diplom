@@ -20,7 +20,6 @@ def new_order(request):
         form = OrderForm(request.POST, initial=initial_data)
         if form.is_valid():
             order = form.save(commit=False)
-            order.total_price = request.cart.subtotal
             order.user = request.user
             order.save()
 
