@@ -8,7 +8,7 @@
 
 <div class="row mb-4">
    {% for category in popular_categories|slice:":4" %}
-        <div class="index-category col-6 col-sm-6 col-md-4 col-lg-3 col-xl-4">
+        <div class="index-category col-6 col-lg-3 col-xl-4">
              <a class="nav-link" href="{% url 'catalog_category' category.slug %}">
                  <div class="cat-name d-flex bg-white">
                     <img src="{{ category.image.url }}" class="cat-image me-2">

@@ -1,0 +1,24 @@
+<form method="post" action="{% url 'cart:update' item.id %}"
+      class="quantity-form btn-group">
+    {% csrf_token %}
+    <button type="button" class="quantity-btn minus btn btn-sm btn-outline-dark rounded-0" data-action="decrease">
+        <svg class="svg-plus-minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><title>Minus SVG Icon</title><path fill="currentColor" d="M128 544h768a32 32 0 1 0 0-64H128a32 32 0 0 0 0 64"/></svg>
+    </button>
+
+    <input class="quantity-input" type="hidden" name="quantity" value="{% if item.quantity > item.product_variant.stock %}{{ item.product_variant.stock }}{% else %}{{ item.quantity }}{% endif %}" min="1"
+           max="{% if item.product_variant.stock < 10 %}{{ item.product_variant.stock}}{% else %}10{% endif %}">
+
+    <div class="btn cart-btn">
+        {% if item.quantity > item.product_variant.stock %}
+          {{ item.product_variant.stock }}
+        {% else %}
+          {{ item.quantity }}
+        {% endif %}
+    </div>
+
+    <button type="button" class="m-0 quantity-btn plus btn btn-sm btn-outline-dark rounded-0" data-action="increase">
+        <svg class="svg-plus-minus" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 1024 1024"><path fill="currentColor" d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"/>
+        </svg>
+    </button>
+</form>

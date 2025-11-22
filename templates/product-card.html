@@ -1,7 +1,7 @@
 <div class="row">
     {% for product in products %}
-    <div class="product-card col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-        <div class="bg-white d-flex flex-column" style="padding: 15px;">
+    <div class="product-card col-6 col-lg-4 col-xl-3">
+        <div class="in-product-card bg-white d-flex flex-column">
 
 
             <!--Изображение-->
@@ -16,7 +16,7 @@
 
 
             <!--Карточка товара-->
-            <div class="d-flex flex-column justify-content-between" style="padding-top: 15px; height: 150px">
+            <div class="card-content d-flex flex-column justify-content-between">
 
 
                 <a class="nav-link" href="{% url 'product_details' product.product.slug product.color.slug %}">
@@ -27,7 +27,7 @@
                 <div>
                     {% if product.product.average_rating %}
                     <div class="d-flex align-items-center">
-                        <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                        <svg class="product-stars me-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <title>Bxs-star SVG Icon</title>
                             <path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065z"
                                   fill="#ffaa00"/>
@@ -40,54 +40,36 @@
                     {% endif %}
                 </div>
 
-                <div class="d-flex justify-content-between" style="height: 40px">
-                    <div class="d-flex align-items-center" style="font-size: 18px">{{product.product.price}}</div>
+                <div class="d-flex row justify-content-between">
+                    <div class="col-12 col-lg-6 d-flex align-items-center detail-title mb-2 mb-lg-0 pb-0">{{product.product.price}}</div>
 
-                    {% if product.stock and product|stringformat:"s" not in request.cart.get_cart_data.items|stringformat:"s" %}
-                    <form method="post" action="{% url 'cart:add' product.id %}" class="d-inline" style="width: 50%">
-                        {% csrf_token %}
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="cart-btn" style="height: 100%; width: 100%">
-                            В корзину
-                        </button>
-                    </form>
-
+                    <div class="col-12 col-lg-6">
+                         {% if product.stock and product|stringformat:"s" not in request.cart.get_cart_data.items|stringformat:"s" %}
+                            <form method="post" action="{% url 'cart:add' product.id %}" class="d-inline" style="width: 50%">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="product-btn">
+                                    В корзину
+                                </button>
+                            </form>
 
                     {% elif product|stringformat:"s" in request.cart.get_cart_data.items|stringformat:"s" %}
                         {% for item in request.cart.get_cart_data.items %}
                             {% if product|stringformat:"s" in item|stringformat:"s" %}
-                              <form method="post" action="{% url 'cart:update' item.id %}" class="quantity-form btn-group">
-                                {% csrf_token %}
-                                    <button type="button" class="quantity-btn minus btn btn-sm btn-outline-dark rounded-0" data-action="decrease">
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 1024 1024"><title>Minus SVG Icon</title><path fill="currentColor" d="M128 544h768a32 32 0 1 0 0-64H128a32 32 0 0 0 0 64"/></svg>
-                                    </button>
-
-                                    <input class="quantity-input" type="hidden" name="quantity" value="{% if item.quantity > item.product_variant.stock %}{{ item.product_variant.stock }}{% else %}{{ item.quantity }}{% endif %}"
-                                           min="1" max="{% if item.product_variant.stock < 10 %}{{ item.product_variant.stock}}{% else %}10{% endif %}">
-
-                                    <div class="btn cart-btn">
-                                        {% if item.quantity > item.product_variant.stock %}
-                                            {{ item.product_variant.stock }}
-                                        {% else %}
-                                            {{ item.quantity }}
-                                        {% endif %}
-                                    </div>
-
-                                    <button type="button" class="m-0 quantity-btn plus btn btn-sm btn-outline-dark rounded-0" data-action="increase">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" viewBox="0 0 1024 1024"><title>Plus SVG Icon</title><path fill="currentColor" d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"/></svg>
-                                    </button>
-                            </form>
+                              {% include 'quantity-btn.html' %}
                             {% endif %}
-                          {% endfor %}
-
+                        {% endfor %}
                     {% else %}
+
                     <div class="d-inline" style="width: 50%">
-                        <button class="cart-btn text-black" style="height: 100%; width: 100%; background: #9F9F9F"
+                        <button class="product-btn text-black" style="background: #9F9F9F"
                                 disabled>
                             Закончился
                         </button>
                     </div>
                     {% endif %}
+                    </div>
+
                 </div>
             </div>
         </div>

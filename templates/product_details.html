@@ -19,14 +19,14 @@
 </nav>
 
 
-<div class="row mx-0 bg-white p-4" style="margin-bottom: 50px">
+<div class="row mx-0 bg-white in-product-card" style="margin-bottom: 50px">
 
 
     <!--    изображения mobile-->
     <div class="col-12 d-block d-lg-none">
 
 
-        <div id="carouselExampleDark" class="carousel carousel-dark slide py-4">
+        <div id="carouselExampleDark" class="carousel carousel-dark slide">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img class="d-block m-auto" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}">
@@ -82,12 +82,12 @@
 
     <!--    Подробная информация-->
     <div class="col-12 col-lg-6 d-flex flex-column justify-content-between p-0">
-        <div class="detail-title" style="font-size: 20px">{{ product_variant }}</div>
+        <div class="detail-title">{{ product_variant }}</div>
 
             {% if product.average_rating %}
             <p>
                 <button class="btn btn-sm btn-outline-dark rounded-0 d-flex align-items-center" onclick="scrollToElement('reviews')">
-                    <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                    <svg class="product-stars me-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <title>Bxs-star SVG Icon</title>
                         <path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065z"
                               fill="#ffaa00"/>
@@ -116,17 +116,27 @@
 
             <p>Цена</p>
             <div class="d-flex justify-content-between">
-                <div class="detail-title" style="font-size: 18px">{{ product_variant.product.price }}</div>
+                <div class="detail-title p-0">{{ product_variant.product.price }}</div>
 
-            {% if product_variant.stock %}
-            <form method="post"  action="{% url 'cart:add' product_variant.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit" class="cart-btn p-3">Добавить в корзину</button>
-            </form>
+                 {% if product_variant.stock and product_variant|stringformat:"s" not in request.cart.get_cart_data.items|stringformat:"s" %}
+                    <form method="post" action="{% url 'cart:add' product_variant.id %}" style="width: 50%">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="product-btn">
+                            В корзину
+                        </button>
+                    </form>
+
+            {% elif product_variant|stringformat:"s" in request.cart.get_cart_data.items|stringformat:"s" %}
+                {% for item in request.cart.get_cart_data.items %}
+                    {% if product_variant|stringformat:"s" in item|stringformat:"s" %}
+                      {% include 'quantity-btn.html' %}
+                    {% endif %}
+                {% endfor %}
             {% else %}
-            <div >
-                <button class="cart-btn p-3 text-black" style="background: #9F9F9F" disabled>
+
+            <div style="width: 50%" class="d-flex align-items-end">
+                <button class="product-btn text-black" style="background: #9F9F9F" disabled>
                     Закончился
                 </button>
             </div>
@@ -138,7 +148,7 @@
 
 {% if product_variant.product.description %}
 <div class="row mb-4">
-    <div style="font-size: 14px; white-space: pre-wrap; white-space: break-spaces;">
+    <div style="white-space: pre-wrap; white-space: break-spaces;">
         {{ product_variant.product.description }}
     </div>
 </div>
@@ -146,49 +156,45 @@
 
 
 <!--Отзывы-->
-<section id="reviews" class="row m-0" style="font-size: 14px;">
+<section id="reviews" class="row m-0">
     <div class="col-12 col-lg-9 p-0">
         {% if reviews %}
 
-        <div class="d-flex align-items-center mb-5 mt-4">
-        <h4 class="small-hl p-0 me-3">Отзывы ({{ product.reviews_count }})</h4>
-        {% if user.is_authenticated %}
-            {% if not user_has_review %}
-                <button class="cart-btn bg-white p-3" onclick="scrollToElement('add_review')">Написать отзыв</button>
+            <div class="d-flex align-items-center mb-3">
+            <h4 class="small-hl p-0 me-3">Отзывы ({{ product.reviews_count }})</h4>
+            {% if user.is_authenticated %}
+                {% if not user_has_review %}
+                    <button class="cart-btn bg-white p-3" onclick="scrollToElement('add_review')">Написать отзыв</button>
+                {% endif %}
+            {% else %}
+                <a class="cart-btn bg-white p-3 mb-3" href="{% url 'login' %}">Написать отзыв</a>
             {% endif %}
-        {% else %}
-            <a class="cart-btn bg-white p-3 mb-3" href="{% url 'login' %}">Написать отзыв</a>
-        {% endif %}
-        </div>
-
-
-
-        {% for review in reviews %}
-        <div class="review mb-5">
-            <div style="height: 35px" class="d-flex justify-content-between">
-                <p style="font-weight: 600; font-size: 17px">{{review.user.username}}</p>
-                <div class="d-flex align-items-center">
-                    <p class="text-secondary" style="margin-right: 15px">{{review.get_relative_date}}</p>
-                    <p style="letter-spacing: -1px;">
-                        {% for i in "12345" %}
-                        {% if forloop.counter <= review.rating %}
-                        <span class="yellow-star">★</span>
-                        {% else %}
-                        <span class="grey-star">★</span>
-                        {% endif %}
-                        {% endfor %}
-                    </p>
-                </div>
             </div>
 
 
-            {% if review.text %}
-            <p style="white-space: pre-wrap; white-space: break-spaces;">{{review.text}}</p>
-            {% else %}
-            <p>Без текста</p>
-            {% endif %}
-        </div>
-        {% endfor %}
+
+            {% for review in reviews %}
+            <div class="review mb-5">
+                <div class="row">
+                    <p class="col-12 col-lg-6 " style="font-weight: 600;">{{review.user.username}}</p>
+
+                    <div class="col-12 col-lg-6 d-flex align-items-center justify-content-lg-end" style="gap: 15px">
+                        <p class="text-secondary order-2 order-lg-1" >{{review.get_relative_date}}</p>
+                        <p style="letter-spacing: -1px;" class="order-1 order-lg-2">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                            <span class="yellow-star">★</span>
+                            {% else %}
+                            <span class="grey-star">★</span>
+                            {% endif %}
+                        {% endfor %}
+                        </p>
+                    </div>
+
+                     <p class="col-12" style="white-space: pre-wrap; white-space: break-spaces;">{{review.text}}</p>
+                </div>
+            </div>
+            {% endfor %}
         {% endif %}
 
 

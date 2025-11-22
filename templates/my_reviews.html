@@ -5,12 +5,12 @@
 
 {% block main %}
 
-<div class="page-title d-flex justify-content-center align-items-end" style="font-size: 40px; height: 113px; margin-bottom: 30px">Мои отзывы</div>
+<div class="centered-title">Мои отзывы</div>
 
-<div class="d-flex justify-content-center mb-5">
+<div class="breadcrumb-cont d-flex justify-content-center mb-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a></li>
+           <li class="breadcrumb-item"><a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a></li>
             <li class="breadcrumb-item active" aria-current="page">Мои отзывы</li>
         </ol>
     </nav>
@@ -18,42 +18,44 @@
 
 
 {% if reviews %}
-{% for review in reviews %}
-<div class="row mb-5">
+    {% for review in reviews %}
+        <div class="row mb-5">
+            <div class="col-12 col-lg-9 order-1 order-lg-1 detail-title">{{review.product.name}}</div>
 
-    <div class="col-12 col-lg-9">
-
-        <div class="review">
-            <div style="height: 35px" class="d-flex justify-content-between align-items-center">
-                <div style="font-weight: 600; font-size: 17px">{{review.product.name}}</div>
-                <div class="d-flex flex-wrap justify-content-end align-items-center">
-                    <div class="small-text text-secondary">{{review.get_relative_date}}</div>
-                    <div style="letter-spacing: -1px; margin-left: 15px">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}
-                            <span class="yellow-star">★</span>
-                            {% else %}
-                            <span class="grey-star">★</span>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
+            <div class="col-12 col-lg-3 order-4 order-lg-2">
+                <button type="button" class="cart-btn p-3 bg-white" style="width: 100%"
+                data-bs-toggle="modal" data-bs-target="#modal-{{ review.id }}">
+                Действия
+                </button>
             </div>
 
-            <div style="white-space: pre-wrap; white-space: break-spaces;">{{review.text}}</div>
+            <div class="col-12 order-2 order-lg-3 d-flex align-items-center" style="gap: 15px">
+                <p style="letter-spacing: -1px;">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                    <span class="yellow-star">★</span>
+                    {% else %}
+                    <span class="grey-star">★</span>
+                    {% endif %}
+                {% endfor %}
+                </p>
+                <p class="text-secondary" >{{review.get_relative_date}}</p>
+            </div>
+
+            <div class="col-12 col-lg-9 order-3 order-lg-4" style="white-space: pre-wrap; white-space: break-spaces;">{{review.text}}</div>
+
+
+
         </div>
-    </div>
 
 
-    <div class="col-12 col-lg-3 ">
-       <button type="button" class="cart-btn p-3 bg-white" style="width: 100%"
-            data-bs-toggle="modal" data-bs-target="#modal-{{ review.id }}">
-        Действия
-    </button>
 
-    <!-- Уникальный id для каждого модального окна -->
+
+
+
+
     <div class="modal fade" id="modal-{{ review.id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-lg-down">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5">Действия</h1>
@@ -73,12 +75,8 @@
             </div>
         </div>
     </div>
-    </div>
-
-
-
-</div>
     {% endfor %}
+
     {% else %}
         <div class="text-center text-secondary">
             <p>Пока нет отзывов</p>

@@ -21,6 +21,7 @@ class Order(models.Model):
     status = models.CharField(
         choices=STATUS_CHOICES,
         default='В обработке',
+        max_length=100,
     )
     email = models.EmailField()
     phone = PhoneNumberField(region='RU')

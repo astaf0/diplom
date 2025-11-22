@@ -34,10 +34,9 @@ class SearchForm(forms.Form):
         max_length=100,
         required=False,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Поиск',
             'autocomplete': 'off',
-            'style': 'font-size: 14px;',
-            'class': 'form-control ps-0 p-2 border-bottom',
+            'class': 'form-control search-input',
+            'placeholder': 'Поиск'
         })
     )
 

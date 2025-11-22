@@ -28,7 +28,6 @@ INSTALLED_APPS = [
 
     'crispy_bootstrap5',
     'crispy_forms',
-    'django_filters',
     'phonenumber_field',
     
     'core',
@@ -122,7 +121,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = '/home/c111837/my-site.na4u.ru/www/static'
 
 
 MEDIA_ROOT = 'media'

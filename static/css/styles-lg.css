@@ -1,0 +1,259 @@
+@media (min-width: 992px) {
+
+    * {
+        font-weight: 500;
+        font-size: 15px;
+    }
+
+    /* Base */
+    body {
+        padding: 100px 0 0 0;
+    }
+
+    .main {
+        padding: 0;
+    }
+
+    .footer {
+        margin-top: 100px;
+    }
+
+    .nav-sm-2 {
+        visibility: hidden;
+    }
+    .nav-sm {
+        visibility: hidden;
+    }
+    .nav-lg {
+        visibility: visible;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 70px;
+        z-index: 1000;
+        font-size: 14px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    /*--------------------------------------------------------*/
+    /* Каталог */
+     #catalogOffcanvas {
+        width: 400px;
+    }
+
+    .catalog-link:hover .category-name {
+        transform: translateX(10px);
+    }
+
+    .offcanvas-header {
+        padding: 20px !important;
+    }
+
+    .offcanvas-header .small-hl {
+        font-size: 20px;
+        font-weight: 500;
+        padding: 0;
+    }
+
+    .offcanvas-header .btn-close {
+        font-size: 16px;
+    }
+
+    .category-name {
+        font-weight: 500;
+        transition: transform 0.3s ease;
+        padding: 16px 24px;
+        font-size: 16px;
+    }
+
+    /* Поиск */
+    #id_q {
+        font-size: 14px;
+        font-family: "Unbounded", sans-serif;
+        font-weight: 300 !important;
+        margin-left: 0;
+    }
+
+
+
+    /*--------------------------------------------------------*/
+    /* Заголовки и текст */
+    .page-title {
+        font-size: 40px;
+        padding-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .centered-title {
+        height: 113px;
+        font-size: 50px;
+        margin-bottom: 30px;
+    }
+
+    .small-hl {
+        font-size: 28px;
+    }
+
+    .detail-title {
+        font-size: 18px;
+    }
+
+    /*-------------------------------------------------------*/
+    /* Кнопки */
+    .cart-btn {
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .product-btn {
+        font-size: 14px;
+        font-weight: 400;
+        height: 40px;
+        width: 100%;
+    }
+
+    .footer-link {
+        font-size: 14px !important;
+    }
+
+    /*------------------------------------------*/
+    /* Звезды рейтинга */
+    .yellow-star {
+        font-size: 20px;
+    }
+
+    .grey-star {
+        font-size: 20px;
+    }
+
+    .review-star {
+        font-size: 28px;
+    }
+
+    /*------------------------------------------*/
+    /* Svg */
+    .product-stars {
+        width: 16px;
+        height: 16px;
+    }
+
+    .svg-plus-minus {
+        width: 20px;
+        height: 20px;
+    }
+
+    .svg-delete {
+        width: 24px;
+        height: 24px;
+    }
+
+    .svg-exit {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
+
+    /*------------------------------------------*/
+    /* Формы */
+    form label{
+        font-size: 16px;
+    }
+
+    .form-control {
+        padding: 12px !important;
+        font-weight: 500 !important;
+        font-size: 16px !important;
+    }
+
+    /* сортировка */
+    #id_sort div {
+        margin-right: 20px;
+        margin-bottom: 10px;
+    }
+
+    #id_sort div label {
+        gap: 10px;
+    }
+
+    #id_sort div label input {
+        width: 15px;
+        height: 15px;
+    }
+
+    /*------------------------------------------*/
+    /* Изображения */
+    .cat-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .catalog-cat-image {
+        width: 40px;
+        height: 40px;
+    }
+
+    .first-image {
+        width: 220px;
+        height: 220px;
+    }
+
+    .carousel-item img {
+        width: 350px;
+        height: 350px;
+    }
+
+    .main-image {
+        width: 300px;
+        height: 300px;
+        object-fit: contain;
+        display: block;
+    }
+
+    /*------------------------------------------*/
+    /* index */
+    .product-card {
+        padding: 5px !important;
+    }
+
+    .index-category {
+        padding: 5px !important;
+    }
+
+    .index-category .cat-name{
+        padding: 20px;
+    }
+
+    .breadcrumb-cont {
+        visibility: visible;
+        height: max-content;
+    }
+
+    .breadcrumb li {
+        font-size: 15px;
+    }
+
+    /*------------------------------------------*/
+    /* Карточка товара */
+    .in-product-card {
+        padding: 20px;
+    }
+
+    .card-content {
+        margin-top: 20px;
+        height: 120px;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
