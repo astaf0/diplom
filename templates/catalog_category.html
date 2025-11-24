@@ -4,7 +4,7 @@
 
 
 {% block main %}
-<nav aria-label="breadcrumb">
+<nav class="breadcrumb-cont" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a class="nav-link" href="{% url 'main' %}">Каталог</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{category.name}}</li>
@@ -15,7 +15,7 @@
 
 <div class="row mb-4">
    {% for popular_category in popular_categories|slice:":4" %}
-    <div class="index-category col-6 col-lg-3 col-xl-4">
+    <div class="index-category col-6 col-lg-3 col-xl-2">
         <a class="p-3 d-flex align-items-center btn border-0 rounded-0 {% if popular_category.name == category.name %}active bg-white border-0{% endif %}" href="{% url 'catalog_category' popular_category.slug %}">
             <img class="catalog-cat-image" src="{{ popular_category.image.url }}">
             <div class="mx-2">{{ popular_category.name }}</div>

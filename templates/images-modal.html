@@ -1,0 +1,46 @@
+<div class="modal fade" id="modal-{{ product_variant.main_image.id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+          <div class="modal-header d-flex align-items-center justify-content-between" style="height: 70px; padding: 0 30px">
+              <h1 class="detail-title p-0">{{ product_variant }}</h1>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <div id="carouselModal-{{ product_variant.main_image.id }}" class="carousel carousel-dark slide" data-bs-ride="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img style="width: 600px; height: 600px; object-fit: contain; display: block;" class="d-block m-auto p-5" src="{{ product_variant.main_image.url }}" alt="{{ product.name }}">
+                    </div>
+
+                    {% for image in images %}
+                    <div class="carousel-item">
+                        <img style="width: 600px; height: 600px; object-fit: contain; display: block;" class="d-block m-auto p-5" src="{{ image.image.url }}" alt="{{ product.name }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal-{{ product_variant.main_image.id }}"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" style="height: 40px" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselModal-{{ product_variant.main_image.id }}"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" style="height: 40px" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+
+                {% if images %}
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselModal-{{ product_variant.main_image.id }}" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    {% for image in images %}
+                    <button type="button" data-bs-target="#carouselModal-{{ product_variant.main_image.id }}" data-bs-slide-to="{{ forloop.counter }}" aria-label="Slide {{ forloop.counter|add:1 }}"></button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+          </div>
+      </div>
+  </div>
+</div>

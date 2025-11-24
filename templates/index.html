@@ -7,20 +7,19 @@
 <div class="small-hl">Популярные категории</div>
 
 <div class="row mb-4">
-   {% for category in popular_categories|slice:":4" %}
-        <div class="index-category col-6 col-lg-3 col-xl-4">
-             <a class="nav-link" href="{% url 'catalog_category' category.slug %}">
-                 <div class="cat-name d-flex bg-white">
-                    <img src="{{ category.image.url }}" class="cat-image me-2">
-                    <div class="d-flex flex-column justify-content-center">
-                        <div>{{ category.name }}</div>
-                        <div class="product-count text-secondary">Товаров: {{ category.product_count }}</div>
-                    </div>
-                 </div>
-             </a>
-        </div>
+   {% for popular_category in popular_categories|slice:":4" %}
+    <div class="index-category col-6 col-lg-3 col-xl-2">
+        <a class="p-3 d-flex align-items-center btn border-0 rounded-0 bg-white border-0" href="{% url 'catalog_category' popular_category.slug %}">
+            <img class="catalog-cat-image" src="{{ popular_category.image.url }}">
+            <div class="mx-2">{{ popular_category.name }}</div>
+            <span class="badge text-bg-secondary">{{ popular_category.product_count }}</span>
+        </a>
+    </div>
     {% endfor %}
 </div>
+
+
+
 
 
 

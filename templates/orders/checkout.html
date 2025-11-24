@@ -5,7 +5,7 @@
 {% block title %}Новый заказ{% endblock %}
 
 {% block main %}
-<nav aria-label="breadcrumb">
+<nav class="breadcrumb-cont" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
             <a class="nav-link" href="{% url 'cart:details' %}">Корзина</a>
@@ -26,10 +26,10 @@
 
     <div class="small-hl">2. Адрес доставки</div>
     <div class="row mb-5">
-        <div class="col-12 col-lg-3">{{ form.city|as_crispy_field }}</div>
-        <div class="col-12 col-lg-3">{{ form.street|as_crispy_field }}</div>
-        <div class="col-12 col-lg-3">{{ form.building|as_crispy_field }}</div>
-        <div class="col-12 col-lg-3">{{ form.flat|as_crispy_field }}</div>
+        <div class="col-6 col-lg-3">{{ form.city|as_crispy_field }}</div>
+        <div class="col-6 col-lg-3">{{ form.street|as_crispy_field }}</div>
+        <div class="col-6 col-lg-3">{{ form.building|as_crispy_field }}</div>
+        <div class="col-6 col-lg-3">{{ form.flat|as_crispy_field }}</div>
     </div>
 
     <div class="small-hl">3. Оплата</div>

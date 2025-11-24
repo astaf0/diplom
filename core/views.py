@@ -7,6 +7,14 @@ from .forms import *
 from .models import *
 
 
+
+def test404(request):
+    return render(request, 'page_404.html')
+
+
+def custom_404(request, exception):
+    return render(request, 'page_404.html', status=404)
+
 def search(request):
     form = SearchForm(request.GET or None)
     products = ProductVariant.objects.all()

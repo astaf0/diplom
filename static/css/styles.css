@@ -96,7 +96,7 @@ body {
 
 /* Поиск */
 #id_q {
-    font-size: 34px;
+    font-size: 34px !important;
     font-family: "Unbounded", sans-serif;
     font-weight: 400 !important;
     padding: 0;
@@ -143,6 +143,25 @@ body {
     padding-bottom: 20px;
 }
 
+.footer-title {
+    font-family: "Unbounded", sans-serif !important;
+    font-weight: 400;
+    font-size: 32px;
+    color: lightgrey !important;
+}
+
+.cart-title {
+    font-weight: 500;
+    font-size: 32px;
+}
+
+.title-404 {
+    font-family: "Unbounded", sans-serif !important;
+    font-weight: 500;
+    font-size: 200px;
+    border-bottom: 10px solid #7acc18;
+}
+
 /*-------------------------------------------------------*/
 /* Кнопки */
 .cart-btn {
@@ -179,7 +198,6 @@ body {
 .footer-link:hover {
     color: #7acc18 !important;
 }
-
 
 /*------------------------------------------*/
 /* Звезды рейтинга */
@@ -319,7 +337,7 @@ form label{
     padding: 30px;
 }
 
-.breadcrumb-cont, breadcrumb {
+.breadcrumb-cont{
     visibility: hidden;
     height: 0;
 }
@@ -335,6 +353,10 @@ form label{
     height: 350px;
 }
 
+/*------------------------------------------*/
+/* Корзина */
 
-
+.cart-price-width {
+    min-width: 220px;
+}
 

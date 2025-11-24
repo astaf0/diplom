@@ -55,7 +55,7 @@
                     <a href="{% url 'product_details' item.product_variant.product.slug item.product_variant.color.slug %}">
                         {% if item.product_variant.main_image %}
                         <img src="{{ item.product_variant.main_image.url }}" alt="{{item.product_variant}}"
-                             style="width: 150px; height: 150px; object-fit: contain;display: block;" class="me-3 d-block">
+                             style="width: 150px; height: 150px; object-fit: contain; display: block;" class="me-3 d-block">
                         {% else %}
                         <div style="color: #76bc21">{{item.product_variant}}</div>
                         {% endif %}
@@ -63,9 +63,8 @@
 
 
                     <div>
-                        <a class="nav-link"
-                           href="{% url 'product_details' item.product_variant.product.slug item.product_variant.color.slug %}">
-                            <p class="detail-title p-0">{{item.product_variant}}</p>
+                        <a class="nav-link" href="{% url 'product_details' item.product_variant.product.slug item.product_variant.color.slug %}">
+                            <p class="cart-title">{{item.product_variant}}</p>
                         </a>
 
                         {% include 'quantity-btn.html' %}
@@ -74,8 +73,8 @@
 
 
                 <div class="d-flex flex-column justify-content-between">
-                    <div class="text-end">
-                        <p>{{ item.total_price }}</p>
+                    <div class="text-end cart-price-width">
+                        <p class="detail-title p-0">{{ item.total_price }}</p>
                         {% if item.quantity > 1 %}
                         <p class="text-secondary">{{ item.product_variant.product.price }} | 1 шт</p>
                         {% endif %}
@@ -99,10 +98,10 @@
     <div class="col-12 col-lg-4 p-0">
         <div class="in-product-card bg-white d-flex flex-column justify-content-between">
             <p class="d-flex justify-content-between">
-                <span>Товаров</span><span>{{cart_data.total_items}}</span>
+                <span class="detail-title p-0">Товаров</span><span class="detail-title p-0">{{cart_data.total_items}}</span>
             </p>
             <p class="d-flex justify-content-between">
-                <span>Итого</span><span>{{cart_data.subtotal}}</span>
+                <span class="detail-title p-0">Итого</span><span class="detail-title p-0">{{cart_data.subtotal}}</span>
             </p>
             <a class="cart-btn py-3 text-center"
                href="{% if user.is_authenticated %}{% url 'new_order' %}{% else %}{% url 'login' %}{% endif %}">

@@ -69,10 +69,10 @@
 
     /* Поиск */
     #id_q {
-        font-size: 14px;
+        font-size: 14px !important;
+        margin-left: 0;
         font-family: "Unbounded", sans-serif;
         font-weight: 300 !important;
-        margin-left: 0;
     }
 
 
@@ -97,6 +97,20 @@
 
     .detail-title {
         font-size: 18px;
+    }
+
+    .footer-title {
+        font-size: 15px;
+    }
+
+    .cart-title {
+        font-weight: 500;
+        font-size: 18px;
+    }
+
+    .title-404 {
+        font-size: 100px;
+        border-bottom: 5px solid #7acc18;
     }
 
     /*-------------------------------------------------------*/
@@ -204,8 +218,8 @@
     }
 
     .main-image {
-        width: 300px;
-        height: 300px;
+        width: 400px;
+        height: 400px;
         object-fit: contain;
         display: block;
     }
@@ -242,6 +256,13 @@
     .card-content {
         margin-top: 20px;
         height: 120px;
+    }
+
+    /*------------------------------------------*/
+    /* Корзина */
+
+    .cart-price-width {
+        min-width: 120px;
     }
 
 }
