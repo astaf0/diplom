@@ -8,7 +8,4 @@ urlpatterns = ([
     path('reviews/my', my_reviews, name='my_reviews'),
     path('reviews/my/<int:review_id>/delete', delete_my_review, name='delete_my_review'),
     path('search/', search, name='search'),
-
-    path('test404/',test404, name='test404'),
-
 ])

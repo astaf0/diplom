@@ -317,10 +317,11 @@ form label{
 }
 
 .carousel-item img {
-    width: 600px;
-    height: 600px;
+    width: 700px;
+    height: 700px;
     object-fit: contain;
     display: block;
+    padding: 80px;
 }
 
 /*------------------------------------------*/

@@ -8,8 +8,10 @@ User = get_user_model()
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(label='Email')
-    password1 = forms.CharField(label='Пароль')
-    password2 = forms.CharField(label='Подтвердите пароль')
+    password1 = forms.CharField(label='Пароль',
+                                widget=forms.PasswordInput(attrs={'class': 'form-control'}),)
+    password2 = forms.CharField(label='Подтвердите пароль',
+                                widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
@@ -31,7 +33,8 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(label='Email')
-    password = forms.CharField(label='Пароль')
+    password = forms.CharField(label='Пароль',
+                               widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     def clean(self):
         email = self.cleaned_data.get('username')
